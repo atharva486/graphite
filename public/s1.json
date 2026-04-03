@@ -1,0 +1,6152 @@
+[
+  {
+    "title": "Contents",
+    "page": 3,
+    "level": 1,
+    "type": "toc",
+    "children": [],
+    "page_range": [
+      3,
+      14
+    ]
+  },
+  {
+    "title": "Preface",
+    "page": 15,
+    "level": 1,
+    "type": "toc",
+    "children": [],
+    "page_range": [
+      15,
+      30
+    ]
+  },
+  {
+    "title": "Tour of Computer Systems",
+    "page": 31,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Information Is Bits + Context",
+        "page": 33,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          33,
+          33
+        ]
+      },
+      {
+        "title": "Programs Are Translated by Other Programs into Different Forms",
+        "page": 34,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Origins of the C programming language",
+            "page": 34,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          34,
+          35
+        ]
+      },
+      {
+        "title": "It Pays to Understand How Compilation Systems Work",
+        "page": 36,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside The GNU project",
+            "page": 36,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          36,
+          36
+        ]
+      },
+      {
+        "title": "Processors Read and Interpret Instructions Stored in Memory",
+        "page": 37,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "1.4.1 Hardware Organization of a System",
+            "page": 38,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Buses",
+            "page": 38,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "I/O Devices",
+            "page": 39,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Main Memory",
+            "page": 39,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Processor",
+            "page": 39,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1.4.2 Running the hello Program",
+            "page": 40,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          37,
+          40
+        ]
+      },
+      {
+        "title": "Caches Matter",
+        "page": 41,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          41,
+          43
+        ]
+      },
+      {
+        "title": "Storage Devices Form a Hierarchy",
+        "page": 44,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Unix, Posix, and the Standard Unix Specification",
+            "page": 46,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1.7.2 Threads",
+            "page": 47,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          44,
+          48
+        ]
+      },
+      {
+        "title": "The Operating System Manages the Hardware",
+        "page": 44,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Unix, Posix, and the Standard Unix Specification",
+            "page": 46,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1.7.2 Threads",
+            "page": 47,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          44,
+          48
+        ]
+      },
+      {
+        "title": "Systems Communicate with Other Systems Using Networks",
+        "page": 49,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside The Linux project",
+            "page": 50,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          49,
+          51
+        ]
+      },
+      {
+        "title": "Important Themes",
+        "page": 52,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "1.9.1 Amdahl's Law",
+            "page": 52,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Expressing relative performance",
+            "page": 53,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1.9.2 Concurrency and Parallelism",
+            "page": 54,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Thread-Level Concurrency",
+            "page": 54,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Instruction-Level Parallelism",
+            "page": 56,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Single-Instruction, Multiple-Data (SIMD) Parallelism",
+            "page": 56,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1.9.3 The Importance of Abstractions in Computer Systems",
+            "page": 56,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          52,
+          56
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 57,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 58,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          57,
+          58
+        ]
+      }
+    ]
+  },
+  {
+    "title": "--- Program Structure & Execution",
+    "page": 59,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Part I",
+        "page": 59,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      }
+    ],
+    "page_range": [
+      59,
+      59
+    ]
+  },
+  {
+    "title": "Representing & Manipulating Information",
+    "page": 60,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Information Storage",
+        "page": 63,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside How to read this chapter",
+            "page": 63,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside The evolution of the C programming language",
+            "page": 64,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? The role of pointers in C",
+            "page": 65,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.1 Hexadecimal Notation",
+            "page": 65,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Converting between decimal and hexadecimal",
+            "page": 68,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.2 Data Sizes",
+            "page": 68,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Declaring pointers",
+            "page": 70,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.3 Addressing and Byte Ordering",
+            "page": 71,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Big endian",
+            "page": 71,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Little endian",
+            "page": 71,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Origin of 'endian'",
+            "page": 72,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Naming data types with typedef",
+            "page": 76,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Formatted printing with printf",
+            "page": 76,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Pointers and arrays",
+            "page": 77,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Pointer creation and dereferencing",
+            "page": 77,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Generating an ASCII table",
+            "page": 77,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.4 Representing Strings",
+            "page": 78,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.5 Representing Code",
+            "page": 78,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside The Unicode standard for text encoding",
+            "page": 79,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.6 Introduction to Boolean Algebra",
+            "page": 79,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside DATA:BOOL More on Boolean algebra and Boolean rings",
+            "page": 81,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.7 Bit-Level Operations in C",
+            "page": 83,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.8 Logical Operations in C",
+            "page": 85,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.1.9 Shift Operations in C",
+            "page": 86,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          63,
+          87
+        ]
+      },
+      {
+        "title": "Integer Representations",
+        "page": 88,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Shifting by k , for large values of k",
+            "page": 88,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Operator precedence issues with shift operations",
+            "page": 88,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.1 Integral Data Types",
+            "page": 89,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.2 Unsigned Encodings",
+            "page": 91,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Definition of unsigned encoding",
+            "page": 92,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.3 Two's-Complement Encodings",
+            "page": 93,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Uniqueness of two's-complement encoding",
+            "page": 94,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside More on fixed-size integer types",
+            "page": 96,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Alternative representations of signed numbers",
+            "page": 97,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.4 Conversions between Signed and Unsigned",
+            "page": 99,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.5 Signed versus Unsigned in C",
+            "page": 103,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.6 Expanding the Bit Representation of a Number",
+            "page": 105,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside DATA:TMIN Writing TMin in C",
+            "page": 106,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.7 Truncating Numbers",
+            "page": 110,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Truncation of a two's-complement number",
+            "page": 111,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Truncation of a two's-complement number",
+            "page": 111,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.2.8 Advice on Signed versus Unsigned",
+            "page": 112,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          88,
+          112
+        ]
+      },
+      {
+        "title": "Integer Arithmetic",
+        "page": 113,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "2.3.1 Unsigned Addition",
+            "page": 113,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Security vulnerability in getpeername",
+            "page": 115,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Security vulnerability in getpeername (continued)",
+            "page": 116,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation:",
+            "page": 116,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Detecting overflow of unsigned addition",
+            "page": 117,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Detecting overflow of unsigned addition",
+            "page": 118,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Unsigned negation",
+            "page": 118,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation:",
+            "page": 118,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.2 Two's-Complement Addition",
+            "page": 119,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Two's-complement addition",
+            "page": 119,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Two's-complement addition",
+            "page": 119,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Detecting overflow in two's-complement addition",
+            "page": 121,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Detecting overflow of two's-complement addition",
+            "page": 122,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.3 Two's-Complement Negation",
+            "page": 124,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Two's-complement negation",
+            "page": 124,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside DATA:TNEG Bit-level representation of two's-complement negation",
+            "page": 125,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.4 Unsigned Multiplication",
+            "page": 125,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.5 Two's-Complement Multiplication",
+            "page": 126,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Security vulnerability in the XDR library",
+            "page": 129,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.6 Multiplying by Constants",
+            "page": 130,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Multiplication by a power of 2",
+            "page": 130,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Multiplication by a power of 2",
+            "page": 130,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.7 Dividing by Powers of 2",
+            "page": 132,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: Unsigned division by a power of 2",
+            "page": 133,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "derivation: Unsigned division by a power of 2",
+            "page": 133,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.3.8 Final Thoughts on Integer Arithmetic",
+            "page": 136,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          113,
+          136
+        ]
+      },
+      {
+        "title": "Floating Point",
+        "page": 137,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside The IEEE",
+            "page": 138,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.1 Fractional Binary Numbers",
+            "page": 138,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.2 IEEE Floating-Point Representation",
+            "page": 141,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Case 1: Normalized Values",
+            "page": 142,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Why set the bias this way for denormalized values?",
+            "page": 143,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Case 2: Denormalized Values",
+            "page": 143,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Case 3: Special Values",
+            "page": 144,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.3 Example Numbers",
+            "page": 144,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.4 Rounding",
+            "page": 149,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.5 Floating-Point Operations",
+            "page": 151,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2.4.6 Floating Point in C",
+            "page": 153,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          137,
+          154
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 155,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Ariane 5: The high cost of floating-point overflow",
+            "page": 156,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bibliographic Notes",
+            "page": 156,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bit-Level Integer Coding Rules",
+            "page": 157,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1. Format A",
+            "page": 167,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "2. Format B",
+            "page": 167,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bit-Level Floating-Point Coding Rules",
+            "page": 170,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Hexadecimal Binary",
+            "page": 177,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          155,
+          190
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Machine-Level Representation",
+    "page": 191,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "A Historical Perspective",
+        "page": 194,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Web Aside ASM:IA32 IA32 programming",
+            "page": 194,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          194,
+          196
+        ]
+      },
+      {
+        "title": "Program Encodings",
+        "page": 197,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.2.1 Machine-Level Code",
+            "page": 198,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside The ever-changing forms of generated code",
+            "page": 200,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.2.2 Code Examples",
+            "page": 200,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside How do I display the byte representation of a program?",
+            "page": 201,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Disassembly of function sum in binary file mstore.o",
+            "page": 202,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.2.3 Notes on Formatting",
+            "page": 203,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          197,
+          204
+        ]
+      },
+      {
+        "title": "Data Formats",
+        "page": 205,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside ATT versus Intel assembly-code formats",
+            "page": 205,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside ASM:EASM Combining assembly code with C programs",
+            "page": 206,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          205,
+          206
+        ]
+      },
+      {
+        "title": "Accessing Information",
+        "page": 207,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.4.1 Operand Specifiers",
+            "page": 208,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.4.2 Data Movement Instructions",
+            "page": 210,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Understanding how data movement changes a destination register",
+            "page": 212,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Comparing byte movement instructions",
+            "page": 214,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.4.3 Data Movement Example",
+            "page": 214,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Some examples of pointers",
+            "page": 216,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.4.4 Pushing and Popping Stack Data",
+            "page": 217,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          207,
+          218
+        ]
+      },
+      {
+        "title": "Arithmetic and Logical Operations",
+        "page": 219,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.5.1 Load Effective Address",
+            "page": 219,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.5.2 Unary and Binary Operations",
+            "page": 222,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.5.3 Shift Operations",
+            "page": 222,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.5.4 Discussion",
+            "page": 224,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.5.5 Special Arithmetic Operations",
+            "page": 225,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          219,
+          227
+        ]
+      },
+      {
+        "title": "Control",
+        "page": 228,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "This compiles to the following assembly code:",
+            "page": 228,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.1 Condition Codes",
+            "page": 229,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.2 Accessing the Condition Codes",
+            "page": 230,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.3 Jump Instructions",
+            "page": 233,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.4 Jump Instruction Encodings",
+            "page": 235,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside What do the instructions rep and repz do?",
+            "page": 236,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.5 Implementing Conditional Branches with Conditional Control",
+            "page": 237,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Describing machine code with C code",
+            "page": 239,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.6 Implementing Conditional Branches with Conditional Moves",
+            "page": 242,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) Implementation using conditional assignment",
+            "page": 242,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside How did you determine this penalty?",
+            "page": 244,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.7 Loops",
+            "page": 248,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Do-While Loops",
+            "page": 248,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Reverse engineering loops",
+            "page": 250,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "While Loops",
+            "page": 251,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(c) Corresponding assembly-language code",
+            "page": 252,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "done:",
+            "page": 254,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "For Loops",
+            "page": 256,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.6.8 Switch Statements",
+            "page": 260,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) Translation into extended C",
+            "page": 262,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          228,
+          265
+        ]
+      },
+      {
+        "title": "Procedures",
+        "page": 266,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.7.1 The Run-Time Stack",
+            "page": 267,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.7.2 Control Transfer",
+            "page": 269,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Beginning of function multstore",
+            "page": 270,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Disassembled code for demonstrating procedure calls and returns",
+            "page": 271,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) Execution trace of example code",
+            "page": 271,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.7.3 Data Transfer",
+            "page": 273,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) C code",
+            "page": 275,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.7.4 Local Storage on the Stack",
+            "page": 276,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.7.5 Local Storage in Registers",
+            "page": 279,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.7.6 Recursive Procedures",
+            "page": 281,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          266,
+          282
+        ]
+      },
+      {
+        "title": "Array Allocation and Access",
+        "page": 283,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "gcc generates the following assembly code:",
+            "page": 283,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.8.1 Basic Principles",
+            "page": 283,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.8.2 Pointer Arithmetic",
+            "page": 285,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.8.3 Nested Arrays",
+            "page": 286,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.8.4 Fixed-Size Arrays",
+            "page": 288,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.8.5 Variable-Size Arrays",
+            "page": 290,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Original C code",
+            "page": 292,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          283,
+          292
+        ]
+      },
+      {
+        "title": "Heterogeneous Data Structures",
+        "page": 293,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.9.1 Structures",
+            "page": 293,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Representing an object as a struct",
+            "page": 294,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Representing an object as a struct (continued)",
+            "page": 295,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.9.2 Unions",
+            "page": 297,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.9.3 Data Alignment",
+            "page": 301,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          293,
+          303
+        ]
+      },
+      {
+        "title": "Combining Control and Data in Machine-Level Programs",
+        "page": 304,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside A case of mandatory alignment",
+            "page": 304,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.10.1 Understanding Pointers",
+            "page": 305,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Function pointers",
+            "page": 306,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.10.2 Life in the Real World: Using the gdb Debugger",
+            "page": 307,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.10.3 Out-of-Bounds Memory References and Buffer Overflow",
+            "page": 307,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.10.4 Thwarting Buffer Overflow Attacks",
+            "page": 312,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Stack Randomization",
+            "page": 312,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Worms and viruses",
+            "page": 313,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Stack Corruption Detection",
+            "page": 314,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Without protector",
+            "page": 316,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) With protector",
+            "page": 317,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Limiting Executable Code Regions",
+            "page": 317,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.10.5 Supporting Variable-Size Stack Frames",
+            "page": 318,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          304,
+          320
+        ]
+      },
+      {
+        "title": "Floating-Point Code",
+        "page": 321,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.11.1 Floating-Point Movement and Conversion Operations",
+            "page": 324,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "and its associated x86-64 assembly code",
+            "page": 325,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.11.2 Floating-Point Code in Procedures",
+            "page": 329,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.11.3 Floating-Point Arithmetic Operations",
+            "page": 330,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.11.4 Defining and Using Floating-Point Constants",
+            "page": 332,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.11.5 Using Bitwise Operations in Floating-Point Code",
+            "page": 333,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "3.11.6 Floating-Point Comparison Operations",
+            "page": 334,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          321,
+          336
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 337,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "3.11.7 Observations about Floating-Point Code",
+            "page": 337,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bibliographic Notes",
+            "page": 338,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "p1 in %rdi, p2 in %rsi, action in %edx",
+            "page": 343,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Gcc generates the following code for these two functions:",
+            "page": 347,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) C code",
+            "page": 351,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "*)); 10 } (b) Portions of generated assembly code )",
+            "page": 351,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "1 fixsetdiag:",
+            "page": 370,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "with the following offsets:",
+            "page": 374,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "A. Stack after line 3:",
+            "page": 374,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "B. Stack after line 5:",
+            "page": 374,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9 ret double funct1a(int p, float q, long r, double s); double funct1b(int p, long q, float r, double s); Solution to Problem 3.54 (page 339) 9 ret Return",
+            "page": 377,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          337,
+          378
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Processor Architecture",
+    "page": 379,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "The Y86-64 Instruction Set Architecture",
+        "page": 383,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "4.1.1 Programmer-Visible State",
+            "page": 383,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.1.2 Y86-64 Instructions",
+            "page": 384,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.1.3 Instruction Encoding",
+            "page": 386,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Comparing x86-64 to Y86-64 instruction encodings",
+            "page": 388,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside RISC and CISC instruction sets",
+            "page": 389,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside The RISC versus CISC controversy",
+            "page": 391,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.1.4 Y86-64 Exceptions",
+            "page": 391,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.1.5 Y86-64 Programs",
+            "page": 392,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "x86-64 code",
+            "page": 393,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Y86-64 code",
+            "page": 393,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.1.6 Some Y86-64 Instruction Details",
+            "page": 398,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          383,
+          399
+        ]
+      },
+      {
+        "title": "Logic Design and the Hardware Control Language HCL",
+        "page": 400,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Getting the details right: Inconsistencies across x86 models",
+            "page": 400,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Modern logic design",
+            "page": 401,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.2.1 Logic Gates",
+            "page": 401,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.2.2 Combinational Circuits and HCL Boolean Expressions",
+            "page": 402,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.2.3 Word-Level Combinational Circuits and HCL Integer Expressions",
+            "page": 404,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Four-way multiplexor.",
+            "page": 407,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.2.4 Set Membership",
+            "page": 408,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.2.5 Memory and Clocking",
+            "page": 409,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          400,
+          411
+        ]
+      },
+      {
+        "title": "Sequential Y86-64 Implementations",
+        "page": 412,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Real-life memory design",
+            "page": 412,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.3.1 Organizing Processing into Stages",
+            "page": 412,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Tracing the execution of a subq instruction",
+            "page": 416,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Tracing the execution of an rmmovq instruction",
+            "page": 418,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Tracing the execution of a pushq instruction",
+            "page": 420,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Tracing the execution of a je instruction",
+            "page": 422,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Tracing the execution of a ret instruction",
+            "page": 423,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.3.2 SEQ Hardware Structure",
+            "page": 424,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.3.3 SEQ Timing",
+            "page": 428,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "principle: No reading back",
+            "page": 429,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.3.4 SEQ Stage Implementations",
+            "page": 432,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Fetch Stage",
+            "page": 433,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Decode and Write-Back Stages",
+            "page": 434,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Execute Stage",
+            "page": 436,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Memory Stage",
+            "page": 437,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "PC Update Stage",
+            "page": 439,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Surveying SEQ",
+            "page": 439,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          412,
+          439
+        ]
+      },
+      {
+        "title": "General Principles of Pipelining",
+        "page": 440,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "4.4.1 Computational Pipelines",
+            "page": 440,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.4.2 A Detailed Look at Pipeline Operation",
+            "page": 442,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.4.3 Limitations of Pipelining",
+            "page": 444,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Nonuniform Partitioning",
+            "page": 444,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Diminishing Returns of Deep Pipelining",
+            "page": 446,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.4.4 Pipelining a System with Feedback",
+            "page": 447,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          440,
+          448
+        ]
+      },
+      {
+        "title": "Pipelined Y86-64 Implementations",
+        "page": 449,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "4.5.1 SEQ+: Rearranging the Computation Stages",
+            "page": 449,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Where is the PC in SEQ+?",
+            "page": 450,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.2 Inserting Pipeline Registers",
+            "page": 450,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.3 Rearranging and Relabeling Signals",
+            "page": 454,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside What is the difference between signals Mstat and mstat?",
+            "page": 455,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.4 Next PC Prediction",
+            "page": 455,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Other branch prediction strategies",
+            "page": 456,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Return address prediction with a stack",
+            "page": 457,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.5 Pipeline Hazards",
+            "page": 457,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# progl",
+            "page": 458,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog2",
+            "page": 459,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog3",
+            "page": 460,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog4",
+            "page": 461,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Avoiding Data Hazards by Stalling",
+            "page": 461,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog2",
+            "page": 462,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog4",
+            "page": 462,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Enumerating classes of data hazards",
+            "page": 463,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Avoiding Data Hazards by Forwarding",
+            "page": 464,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog2",
+            "page": 464,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog3",
+            "page": 465,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog4",
+            "page": 466,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Load/Use Data Hazards",
+            "page": 467,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog5",
+            "page": 469,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Avoiding Control Hazards",
+            "page": 469,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog5",
+            "page": 470,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.6 Exception Handling",
+            "page": 472,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.7 PIPE Stage Implementations",
+            "page": 475,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "PC Selection and Fetch Stage",
+            "page": 475,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Decode and Write-Back Stages",
+            "page": 477,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "# prog8",
+            "page": 480,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Execute Stage",
+            "page": 481,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Memory Stage",
+            "page": 482,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.8 Pipeline Control Logic",
+            "page": 483,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Desired Handling of Special Control Cases",
+            "page": 483,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Detecting Special Control Conditions",
+            "page": 485,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Pipeline Control Mechanisms",
+            "page": 487,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Combinations of Control Conditions",
+            "page": 488,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Pipeline register",
+            "page": 489,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Control Logic Implementation",
+            "page": 490,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.9 Performance Analysis",
+            "page": 492,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Testing the design",
+            "page": 493,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Formally verifying our design",
+            "page": 494,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside ARCH:VLOG Verilog implementation of a pipelined Y86-64 processor",
+            "page": 495,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.5.10 Unfinished Business",
+            "page": 496,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Multicycle Instructions",
+            "page": 496,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Interfacing with the Memory System",
+            "page": 497,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          449,
+          497
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 498,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside State-of-the-art microprocessor design",
+            "page": 499,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside ARCH:HCL HCL descriptions of Y86-64 processors",
+            "page": 500,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "4.6.1 Y86-64 Simulators",
+            "page": 500,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bibliographic Notes",
+            "page": 501,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Several features of this encoding are worth noting:",
+            "page": 508,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "bool need_valC =",
+            "page": 515,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          498,
+          522
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Optimizing Program Performance",
+    "page": 523,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Capabilities and Limitations of Optimizing Compilers",
+        "page": 526,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Optimizing function calls by inline substitution",
+            "page": 529,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          526,
+          529
+        ]
+      },
+      {
+        "title": "Expressing Program Performance",
+        "page": 530,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          530,
+          531
+        ]
+      },
+      {
+        "title": "Program Example",
+        "page": 532,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside What is a least squares fit?",
+            "page": 532,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          532,
+          535
+        ]
+      },
+      {
+        "title": "Eliminating Loop Inefﬁciencies",
+        "page": 536,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.4 Eliminating Loop Inefficiencies",
+            "page": 536,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          536,
+          539
+        ]
+      },
+      {
+        "title": "Reducing Procedure Calls",
+        "page": 540,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          540,
+          541
+        ]
+      },
+      {
+        "title": "Eliminating Unneeded Memory References",
+        "page": 542,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          542,
+          544
+        ]
+      },
+      {
+        "title": "Understanding Modern Processors",
+        "page": 545,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.7.1 Overall Operation",
+            "page": 546,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside The history of out-of-order processing",
+            "page": 550,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.7.2 Functional Unit Performance",
+            "page": 551,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.7.3 An Abstract Model of Processor Operation",
+            "page": 553,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "From Machine-Level Code to Data-Flow Graphs",
+            "page": 553,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Other Performance Factors",
+            "page": 557,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          545,
+          558
+        ]
+      },
+      {
+        "title": "Loop Unrolling",
+        "page": 559,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Getting the compiler to unroll loops",
+            "page": 563,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          559,
+          563
+        ]
+      },
+      {
+        "title": "Enhancing Parallelism",
+        "page": 564,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.9.1 Multiple Accumulators",
+            "page": 564,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.9.2 Reassociation Transformation",
+            "page": 569,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside OPT:SIMD Achieving greater parallelism with vector instructions",
+            "page": 574,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          564,
+          574
+        ]
+      },
+      {
+        "title": "Summary of Results for Optimizing Combining Code",
+        "page": 575,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Web Aside OPT:SIMD Achieving greater parallelism with vector instructions (continued)",
+            "page": 575,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          575,
+          575
+        ]
+      },
+      {
+        "title": "Some Limiting Factors",
+        "page": 576,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.11.1 Register Spilling",
+            "page": 576,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.11.2 Branch Prediction and Misprediction Penalties",
+            "page": 577,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Do Not Be Overly Concerned about Predictable Branches",
+            "page": 578,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Write Code Suitable for Implementation with Conditional Moves",
+            "page": 579,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          576,
+          580
+        ]
+      },
+      {
+        "title": "Understanding Memory Performance",
+        "page": 581,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.12.1 Load Performance",
+            "page": 582,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.12.2 Store Performance",
+            "page": 583,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          581,
+          588
+        ]
+      },
+      {
+        "title": "Life in the Real World: Performance Improvement Techniques",
+        "page": 589,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          589,
+          589
+        ]
+      },
+      {
+        "title": "Identifying and Eliminating Performance Bottlenecks",
+        "page": 590,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "5.14.1 Program Profiling",
+            "page": 590,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "5.14.2 Using a Profiler to Guide Optimization",
+            "page": 593,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Hash. Computing the hash function",
+            "page": 594,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          590,
+          595
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 596,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 597,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          596,
+          606
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Memory Hierarchy",
+    "page": 607,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Storage Technologies",
+        "page": 609,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "6.1.1 Random Access Memory",
+            "page": 609,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Static RAM",
+            "page": 609,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Dynamic RAM",
+            "page": 610,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Conventional DRAMs",
+            "page": 610,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside A note on terminology",
+            "page": 611,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Memory Modules",
+            "page": 612,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Enhanced DRAMs",
+            "page": 613,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Nonvolatile Memory",
+            "page": 614,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Historical popularity of DRAM technologies",
+            "page": 614,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Accessing Main Memory",
+            "page": 615,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside A note on bus designs",
+            "page": 616,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.1.2 Disk Storage",
+            "page": 617,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Disk Geometry",
+            "page": 618,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Disk Capacity",
+            "page": 619,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Disk Operation",
+            "page": 620,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "This example illustrates some important points:",
+            "page": 623,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Logical Disk Blocks",
+            "page": 623,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Formatted disk capacity",
+            "page": 624,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Connecting I/O Devices",
+            "page": 624,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Accessing Disks",
+            "page": 625,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Advances in I/O bus designs",
+            "page": 626,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Reading a disk sector.",
+            "page": 627,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Characteristics of a commercial disk drive",
+            "page": 628,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.1.3 Solid State Disks",
+            "page": 628,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.1.4 Storage Technology Trends",
+            "page": 630,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) SRAM trends",
+            "page": 631,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) DRAM trends",
+            "page": 631,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(c) Rotating disk trends",
+            "page": 631,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(d) CPU trends",
+            "page": 631,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          609,
+          631
+        ]
+      },
+      {
+        "title": "Locality",
+        "page": 632,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside When cycle time stood still: The advent of multi-core processors",
+            "page": 633,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.2.1 Locality of References to Program Data",
+            "page": 634,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.2.2 Locality of Instruction Fetches",
+            "page": 635,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.2.3 Summary of Locality",
+            "page": 636,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          632,
+          636
+        ]
+      },
+      {
+        "title": "The Memory Hierarchy",
+        "page": 637,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "6.3.1 Caching in the Memory Hierarchy",
+            "page": 638,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Other memory hierarchies",
+            "page": 639,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Cache Hits",
+            "page": 640,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Cache Misses",
+            "page": 640,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Kinds of Cache Misses",
+            "page": 640,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Cache Management",
+            "page": 641,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          637,
+          641
+        ]
+      },
+      {
+        "title": "Cache Memories",
+        "page": 642,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "6.3.2 Summary of Memory Hierarchy Concepts",
+            "page": 642,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.1 Generic Cache Memory Organization",
+            "page": 643,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.2 Direct-Mapped Caches",
+            "page": 645,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Set Selection in Direct-Mapped Caches",
+            "page": 646,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Line Matching in Direct-Mapped Caches",
+            "page": 646,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Word Selection in Direct-Mapped Caches",
+            "page": 647,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Line Replacement on Misses in Direct-Mapped Caches",
+            "page": 647,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Putting It Together: A Direct-Mapped Cache in Action",
+            "page": 647,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Conflict Misses in Direct-Mapped Caches",
+            "page": 650,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Why index with the middle bits?",
+            "page": 651,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.3 Set Associative Caches",
+            "page": 652,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Set Selection in Set Associative Caches",
+            "page": 653,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Line Matching and Word Selection in Set Associative Caches",
+            "page": 653,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Line Replacement on Misses in Set Associative Caches",
+            "page": 654,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.4 Fully Associative Caches",
+            "page": 654,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Set Selection in Fully Associative Caches",
+            "page": 655,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Line Matching and Word Selection in Fully Associative Caches",
+            "page": 655,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "B. Memory reference:",
+            "page": 658,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.5 Issues with Writes",
+            "page": 658,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.6 Anatomy of a Real Cache Hierarchy",
+            "page": 659,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.4.7 Performance Impact of Cache Parameters",
+            "page": 659,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Impact of Cache Size",
+            "page": 660,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          642,
+          660
+        ]
+      },
+      {
+        "title": "Writing Cache-Friendly Code",
+        "page": 661,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Impact of Block Size",
+            "page": 661,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Impact of Associativity",
+            "page": 661,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Impact of Write Strategy",
+            "page": 661,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Cache lines, sets, and blocks: What's the difference?",
+            "page": 662,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          661,
+          666
+        ]
+      },
+      {
+        "title": "Putting It Together: The Impact of Caches on Program Performance",
+        "page": 667,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "6.6.1 The Memory Mountain",
+            "page": 667,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.6.2 Rearranging Loops to Increase Spatial Locality",
+            "page": 671,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Version ijk",
+            "page": 673,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) Version jik",
+            "page": 673,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Web Aside MEM:BLOCKING Using blocking to increase temporal locality",
+            "page": 675,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "6.6.3 Exploiting Locality in Your Programs",
+            "page": 675,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          667,
+          675
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 676,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 676,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "B. Memory reference:",
+            "page": 692,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "B. Memory reference:",
+            "page": 692,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          676,
+          694
+        ]
+      }
+    ]
+  },
+  {
+    "title": "--- Running Programs",
+    "page": 695,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Part II",
+        "page": 695,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      },
+      {
+        "title": "Running Programs on a System",
+        "page": 695,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      }
+    ],
+    "page_range": [
+      695,
+      695
+    ]
+  },
+  {
+    "title": "Linking",
+    "page": 696,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Compiler Drivers",
+        "page": 698,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          698,
+          698
+        ]
+      },
+      {
+        "title": "Static Linking",
+        "page": 699,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          699,
+          699
+        ]
+      },
+      {
+        "title": "Object Files",
+        "page": 700,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          700,
+          700
+        ]
+      },
+      {
+        "title": "Relocatable Object Files",
+        "page": 701,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          701,
+          701
+        ]
+      },
+      {
+        "title": "Symbols and Symbol Tables",
+        "page": 702,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Why is uninitialized data called .bss ?",
+            "page": 702,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "New to C? Hiding variable and function names with static",
+            "page": 704,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) m.c",
+            "page": 705,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(b) swap.c",
+            "page": 705,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          702,
+          705
+        ]
+      },
+      {
+        "title": "Symbol Resolution",
+        "page": 706,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Mangling of linker symbols in C++ and Java",
+            "page": 707,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.6.1 How Linkers Resolve Duplicate Symbol Names",
+            "page": 707,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.6.2 Linking with Static Libraries",
+            "page": 711,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.6.3 How Linkers Use Static Libraries to Resolve References",
+            "page": 715,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          706,
+          715
+        ]
+      },
+      {
+        "title": "Relocation",
+        "page": 716,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "7.7.1 Relocation Entries",
+            "page": 717,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.7.2 Relocating Symbol References",
+            "page": 718,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Relocating PC-Relative References",
+            "page": 719,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Relocating Absolute References",
+            "page": 720,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Relocated .text section",
+            "page": 721,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          716,
+          721
+        ]
+      },
+      {
+        "title": "Executable Object Files",
+        "page": 722,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "vaddr mod align = off mod align",
+            "page": 723,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          722,
+          723
+        ]
+      },
+      {
+        "title": "Loading Executable Object Files",
+        "page": 724,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "off mod align = 0xdf8 mod 0x200000 = 0xdf8",
+            "page": 724,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          724,
+          724
+        ]
+      },
+      {
+        "title": "Dynamic Linking with Shared Libraries",
+        "page": 725,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside How do loaders really work?",
+            "page": 726,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          725,
+          727
+        ]
+      },
+      {
+        "title": "Loading and Linking Shared Libraries from Applications",
+        "page": 728,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          728,
+          730
+        ]
+      },
+      {
+        "title": "Position-Independent Code (PIC)",
+        "page": 731,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Shared libraries and the Java Native Interface",
+            "page": 731,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "PIC Data References",
+            "page": 731,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "PIC Function Calls",
+            "page": 732,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          731,
+          733
+        ]
+      },
+      {
+        "title": "Library Interpositioning",
+        "page": 734,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "7.13.1 Compile-Time Interpositioning",
+            "page": 735,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.13.2 Link-Time Interpositioning",
+            "page": 735,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "(a) Example program int.c",
+            "page": 736,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "7.13.3 Run-Time Interpositioning",
+            "page": 737,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          734,
+          739
+        ]
+      },
+      {
+        "title": "Tools for Manipulating Object Files",
+        "page": 740,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 741,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          740,
+          746
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 740,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 741,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          740,
+          746
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Exceptional Control Flow",
+    "page": 747,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Exceptions",
+        "page": 749,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Hardware versus software exceptions",
+            "page": 750,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.1.1 Exception Handling",
+            "page": 750,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.1.2 Classes of Exceptions",
+            "page": 752,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Interrupts",
+            "page": 752,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Traps and System Calls",
+            "page": 753,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Fault",
+            "page": 754,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Faults",
+            "page": 754,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aborts",
+            "page": 754,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.1.3 Exceptions in Linux/x86-64 Systems",
+            "page": 755,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Linux/x86-64 Faults and Aborts",
+            "page": 755,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Linux/x86-64 System Calls",
+            "page": 755,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside A note on terminology",
+            "page": 757,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          749,
+          757
+        ]
+      },
+      {
+        "title": "Processes",
+        "page": 758,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "8.2.1 Logical Control Flow",
+            "page": 758,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.2.2 Concurrent Flows",
+            "page": 759,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.2.3 Private Address Space",
+            "page": 760,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.2.4 User and Kernel Modes",
+            "page": 760,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.2.5 Context Switches",
+            "page": 762,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          758,
+          762
+        ]
+      },
+      {
+        "title": "System Call Error Handling",
+        "page": 763,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          763,
+          763
+        ]
+      },
+      {
+        "title": "Process Control",
+        "page": 764,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "8.4.1 Obtaining Process IDs",
+            "page": 765,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.4.2 Creating and Terminating Processes",
+            "page": 765,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.4.3 Reaping Child Processes",
+            "page": 769,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Why are terminated children called zombies?",
+            "page": 770,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Determining the Members of the Wait Set",
+            "page": 770,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Modifying the Default Behavior",
+            "page": 770,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Checking the Exit Status of a Reaped Child",
+            "page": 771,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Error Conditions",
+            "page": 771,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The wait Function",
+            "page": 772,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Constants associated with Unix functions",
+            "page": 772,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.4.4 Putting Processes to Sleep",
+            "page": 775,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.4.5 Loading and Running Programs",
+            "page": 776,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.4.6 Using fork and execve to Run Programs",
+            "page": 779,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Programs versus processes",
+            "page": 779,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          764,
+          781
+        ]
+      },
+      {
+        "title": "Signals",
+        "page": 782,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "8.5.1 Signal Terminology",
+            "page": 784,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.2 Sending Signals",
+            "page": 785,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Process Groups",
+            "page": 785,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Sending Signals with the /bin/kill Program",
+            "page": 786,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Sending Signals from the Keyboard",
+            "page": 786,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Sending Signals with the kill Function",
+            "page": 787,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Sending Signals with the alarm Function",
+            "page": 788,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.3 Receiving Signals",
+            "page": 788,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.4 Blocking and Unblocking Signals",
+            "page": 790,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.5 Writing Signal Handlers",
+            "page": 792,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Safe Signal Handling",
+            "page": 792,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Correct Signal Handling",
+            "page": 796,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Portable Signal Handling",
+            "page": 800,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.6 Synchronizing Flows to Avoid Nasty Concurrency Bugs",
+            "page": 802,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "8.5.7 Explicitly Waiting for Signals",
+            "page": 804,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          782,
+          806
+        ]
+      },
+      {
+        "title": "Nonlocal Jumps",
+        "page": 807,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          807,
+          811
+        ]
+      },
+      {
+        "title": "Tools for Manipulating Processes",
+        "page": 812,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Software exceptions in C++ and Java",
+            "page": 812,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          812,
+          812
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 813,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 813,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "code/ecf/global-snooze.c 1 unsigned int wakeup(unsigned int secs) { 2 unsigned int rc = sleep(secs); 3 4 printf(\"Woke up at %d secs.\\n\", secs-rc+1); 5 return rc; 6 } code/ecf/global-snooze.c Solution to Problem 8.6 (page 788) code/ecf/myecho.c 1 #include \"csapp.h\" 2 3 int main(int argc, char argv[], char envp[]) 4 { 5 int i; 6 7 printf(\"Command-line arguments:\\n\");",
+            "page": 823,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          813,
+          825
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Virtual Memory",
+    "page": 826,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Physical and Virtual Addressing",
+        "page": 828,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          828,
+          828
+        ]
+      },
+      {
+        "title": "Address Spaces",
+        "page": 829,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          829,
+          829
+        ]
+      },
+      {
+        "title": "VM as a Tool for Caching",
+        "page": 830,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "9.3.1 DRAM Cache Organization",
+            "page": 831,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.3.2 Page Tables",
+            "page": 831,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.3.3 Page Hits",
+            "page": 833,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.3.4 Page Faults",
+            "page": 833,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "VM page fault (after).",
+            "page": 834,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.3.5 Allocating Pages",
+            "page": 835,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.3.6 Locality to the Rescue Again",
+            "page": 835,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          830,
+          835
+        ]
+      },
+      {
+        "title": "VM as a Tool for Memory Management",
+        "page": 836,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Counting page faults",
+            "page": 836,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          836,
+          836
+        ]
+      },
+      {
+        "title": "VM as a Tool for Memory Protection",
+        "page": 837,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          837,
+          837
+        ]
+      },
+      {
+        "title": "Address Translation",
+        "page": 838,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Number of",
+            "page": 841,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.6.1 Integrating Caches and VM",
+            "page": 842,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.6.2 Speeding Up Address Translation with a TLB",
+            "page": 842,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.6.3 Multi-Level Page Tables",
+            "page": 844,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.6.4 Putting It Together: End-to-End Address Translation",
+            "page": 846,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "0x03d7",
+            "page": 849,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "A. Virtual address format",
+            "page": 849,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "B. Address translation",
+            "page": 849,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "C. Physical address format",
+            "page": 849,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          838,
+          849
+        ]
+      },
+      {
+        "title": "Case Study: The Intel Core i7/Linux Memory System",
+        "page": 850,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "D. Physical memory reference",
+            "page": 850,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Processor package",
+            "page": 850,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.7.1 Core i7 Address Translation",
+            "page": 851,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.7.2 Linux Virtual Memory System",
+            "page": 853,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Optimizing address translation",
+            "page": 855,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Linux Virtual Memory Areas",
+            "page": 855,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Linux Page Fault Exception Handling",
+            "page": 857,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          850,
+          857
+        ]
+      },
+      {
+        "title": "Memory Mapping",
+        "page": 858,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "9.8.1 Shared Objects Revisited",
+            "page": 858,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.8.2 The fork Function Revisited",
+            "page": 861,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.8.3 The execve Function Revisited",
+            "page": 861,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.8.4 User-Level Memory Mapping with the mmap Function",
+            "page": 862,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          858,
+          863
+        ]
+      },
+      {
+        "title": "Dynamic Memory Allocation",
+        "page": 864,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "9.9.1 The malloc and free Functions",
+            "page": 865,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside How big is a word?",
+            "page": 866,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.3 Allocator Requirements and Goals",
+            "page": 869,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.4 Fragmentation",
+            "page": 871,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.5 Implementation Issues",
+            "page": 871,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.6 Implicit Free Lists",
+            "page": 872,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.7 Placing Allocated Blocks",
+            "page": 874,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.8 Splitting Free Blocks",
+            "page": 874,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.9 Getting Additional Heap Memory",
+            "page": 875,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.10 Coalescing Free Blocks",
+            "page": 875,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.11 Coalescing with Boundary Tags",
+            "page": 876,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.12 Putting It Together: Implementing a Simple Allocator",
+            "page": 879,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "General Allocator Design",
+            "page": 879,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Basic Constants and Macros for Manipulating the Free List",
+            "page": 881,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Creating the Initial Free List",
+            "page": 882,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Freeing and Coalescing Blocks",
+            "page": 884,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Allocating Blocks",
+            "page": 884,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.13 Explicit Free Lists",
+            "page": 887,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.9.14 Segregated Free Lists",
+            "page": 888,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Simple Segregated Storage",
+            "page": 889,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Segregated Fits",
+            "page": 889,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          864,
+          889
+        ]
+      },
+      {
+        "title": "Garbage Collection",
+        "page": 890,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Buddy Systems",
+            "page": 890,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.10.1 Garbage Collector Basics",
+            "page": 891,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.10.2 Mark&Sweep Garbage Collectors",
+            "page": 892,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.10.3 Conservative Mark&Sweep for C Programs",
+            "page": 894,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          890,
+          894
+        ]
+      },
+      {
+        "title": "Common Memory-Related Bugs in C Programs",
+        "page": 895,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "9.11.1 Dereferencing Bad Pointers",
+            "page": 895,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.2 Reading Uninitialized Memory",
+            "page": 896,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.3 Allowing Stack Buffer Overflows",
+            "page": 896,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.4 Assuming That Pointers and the Objects They Point to Are the Same Size",
+            "page": 897,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.5 Making Off-by-One Errors",
+            "page": 897,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.6 Referencing a Pointer Instead of the Object It Points To",
+            "page": 898,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.7 Misunderstanding Pointer Arithmetic",
+            "page": 898,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.8 Referencing Nonexistent Variables",
+            "page": 899,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "9.11.9 Referencing Data in Free Heap Blocks",
+            "page": 899,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          895,
+          899
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 900,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "9.11.10 Introducing Memory Leaks",
+            "page": 900,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bibliographic Notes",
+            "page": 901,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "0x027c",
+            "page": 902,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "C. Physical memory reference",
+            "page": 904,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "A. 00 0011 1101 0111",
+            "page": 907,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "C. 0011 0101 0111",
+            "page": 907,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          900,
+          910
+        ]
+      }
+    ]
+  },
+  {
+    "title": "--- Interaction & Communication",
+    "page": 911,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Part III",
+        "page": 911,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      },
+      {
+        "title": "Interaction and Communication between Programs",
+        "page": 911,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      }
+    ],
+    "page_range": [
+      911,
+      911
+    ]
+  },
+  {
+    "title": "System-Level IO",
+    "page": 912,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Unix I/O",
+        "page": 913,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          913,
+          913
+        ]
+      },
+      {
+        "title": "Files",
+        "page": 914,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside End of line (EOL) indicators",
+            "page": 915,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          914,
+          915
+        ]
+      },
+      {
+        "title": "Opening and Closing Files",
+        "page": 916,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          916,
+          917
+        ]
+      },
+      {
+        "title": "Reading and Writing Files",
+        "page": 918,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside What's the difference between ssizet and sizet ?",
+            "page": 919,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          918,
+          919
+        ]
+      },
+      {
+        "title": "Robust Reading and Writing with the",
+        "page": 920,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "10.5.1 Rio Unbuffered Input and Output Functions",
+            "page": 920,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "10.5.2 Rio Buffered Input Functions",
+            "page": 921,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          920,
+          925
+        ]
+      },
+      {
+        "title": "Package",
+        "page": 920,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "10.5.1 Rio Unbuffered Input and Output Functions",
+            "page": 920,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "10.5.2 Rio Buffered Input Functions",
+            "page": 921,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          920,
+          925
+        ]
+      },
+      {
+        "title": "Reading File Metadata",
+        "page": 926,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Origins of the Rio package",
+            "page": 926,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          926,
+          927
+        ]
+      },
+      {
+        "title": "Reading Directory Contents",
+        "page": 928,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          928,
+          928
+        ]
+      },
+      {
+        "title": "Sharing Files",
+        "page": 929,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          929,
+          931
+        ]
+      },
+      {
+        "title": "I/O Redirection",
+        "page": 932,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Right and left hoinkies",
+            "page": 933,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          932,
+          933
+        ]
+      },
+      {
+        "title": "Standard I/O",
+        "page": 934,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          934,
+          935
+        ]
+      },
+      {
+        "title": "Putting It Together: Which I/O Functions Should I Use?",
+        "page": 934,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          934,
+          935
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 936,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 937,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          936,
+          939
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Network Programming",
+    "page": 940,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "The Client-Server Programming Model",
+        "page": 941,
+        "level": 2,
+        "type": "toc",
+        "children": [],
+        "page_range": [
+          941,
+          941
+        ]
+      },
+      {
+        "title": "Networks",
+        "page": 942,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Client-server transactions versus database transactions",
+            "page": 942,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          942,
+          946
+        ]
+      },
+      {
+        "title": "The Global IP Internet",
+        "page": 947,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside IPv4 and IPv6",
+            "page": 948,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.3.1 IP Addresses",
+            "page": 948,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Dotted-decimal address Hex address",
+            "page": 950,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.3.2 Internet Domain Names",
+            "page": 950,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.3.3 Internet Connections",
+            "page": 952,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside How many Internet hosts are there?",
+            "page": 953,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Origins of the Internet",
+            "page": 954,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          947,
+          954
+        ]
+      },
+      {
+        "title": "The Sockets Interface",
+        "page": 955,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Origins of the sockets interface",
+            "page": 955,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.1 Socket Address Structures",
+            "page": 956,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.2 The socket Function",
+            "page": 957,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.3 The connect Function",
+            "page": 957,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.4 The bind Function",
+            "page": 958,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.5 The listen Function",
+            "page": 958,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.6 The accept Function",
+            "page": 959,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Why the distinction between listening and connected descriptors?",
+            "page": 960,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.7 Host and Service Conversion",
+            "page": 960,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The getaddrinfo Function",
+            "page": 960,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The getnameinfo Function",
+            "page": 963,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.8 Helper Functions for the Sockets Interface",
+            "page": 965,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The open_clientfd Function",
+            "page": 965,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The open_listenfd Function",
+            "page": 967,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.4.9 Example Echo Client and Server",
+            "page": 967,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          955,
+          970
+        ]
+      },
+      {
+        "title": "Web Servers",
+        "page": 971,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside What does EOF on a connection mean?",
+            "page": 971,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.5.1 Web Basics",
+            "page": 971,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Origins of the World Wide Web",
+            "page": 972,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.5.2 Web Content",
+            "page": 972,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.5.3 HTTP Transactions",
+            "page": 973,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "HTTP Requests",
+            "page": 974,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "header-name : header-data",
+            "page": 975,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "HTTP Responses",
+            "page": 975,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "version status-code status-message",
+            "page": 975,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Passing arguments in HTTP POST requests",
+            "page": 976,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "11.5.4 Serving Dynamic Content",
+            "page": 976,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "How Does the Client Pass Program Arguments to the Server?",
+            "page": 976,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "How Does the Server Pass Arguments to the Child?",
+            "page": 976,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "How Does the Server Pass Other Information to the Child?",
+            "page": 977,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Where Does the Child Send Its Output?",
+            "page": 977,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Passing arguments in HTTP POST requests to CGI programs",
+            "page": 978,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          971,
+          978
+        ]
+      },
+      {
+        "title": "Putting It Together: The",
+        "page": 979,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "11.6 Putting It Together: The Tiny Web Server",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The Tiny main Routine",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The doit Function",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The clienterror Function",
+            "page": 982,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The read_requesthdrs Function",
+            "page": 983,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The parse_uri Function",
+            "page": 983,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The serve_static Function",
+            "page": 984,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The serve_dynamic Function",
+            "page": 986,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          979,
+          986
+        ]
+      },
+      {
+        "title": "Web Server",
+        "page": 979,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "11.6 Putting It Together: The Tiny Web Server",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The Tiny main Routine",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The doit Function",
+            "page": 979,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The clienterror Function",
+            "page": 982,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The read_requesthdrs Function",
+            "page": 983,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The parse_uri Function",
+            "page": 983,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The serve_static Function",
+            "page": 984,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "The serve_dynamic Function",
+            "page": 986,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          979,
+          986
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 987,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Dealing with prematurely closed connections",
+            "page": 987,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Bibliographic Notes",
+            "page": 988,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          987,
+          992
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Concurrent Programming",
+    "page": 993,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Concurrent Programming with Processes",
+        "page": 995,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "12.1.1 A Concurrent Server Based on Processes",
+            "page": 996,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.1.2 Pros and Cons of Processes",
+            "page": 997,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          995,
+          998
+        ]
+      },
+      {
+        "title": "Concurrent Programming with I/O Multiplexing",
+        "page": 999,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Unix IPC",
+            "page": 999,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.2.1 A Concurrent Event-Driven Server Based on I/O Multiplexing",
+            "page": 1002,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          999,
+          1006
+        ]
+      },
+      {
+        "title": "Concurrent Programming with Threads",
+        "page": 1007,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Event-driven Web servers",
+            "page": 1007,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.2.2 Pros and Cons of I/O Multiplexing",
+            "page": 1007,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.1 Thread Execution Model",
+            "page": 1008,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.2 Posix Threads",
+            "page": 1009,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.3 Creating Threads",
+            "page": 1010,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.4 Terminating Threads",
+            "page": 1010,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.5 Reaping Terminated Threads",
+            "page": 1011,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.6 Detaching Threads",
+            "page": 1011,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.7 Initializing Threads",
+            "page": 1012,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.3.8 A Concurrent Server Based on Threads",
+            "page": 1013,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1007,
+          1013
+        ]
+      },
+      {
+        "title": "Shared Variables in Threaded Programs",
+        "page": 1014,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "12.4.1 Threads Memory Model",
+            "page": 1015,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.4.2 Mapping Variables to Memory",
+            "page": 1016,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1014,
+          1016
+        ]
+      },
+      {
+        "title": "Synchronizing Threads with Semaphores",
+        "page": 1017,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "12.4.3 Shared Variables",
+            "page": 1017,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.5.1 Progress Graphs",
+            "page": 1021,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "An example trajectory.",
+            "page": 1022,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.5.2 Semaphores",
+            "page": 1023,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.5.3 Using Semaphores for Mutual Exclusion",
+            "page": 1024,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Limitations of progress graphs",
+            "page": 1026,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.5.4 Using Semaphores to Schedule Shared Resources",
+            "page": 1026,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Producer-Consumer Problem",
+            "page": 1027,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Readers-Writers Problem",
+            "page": 1028,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.5.5 Putting It Together: A Concurrent Server Based on Prethreading",
+            "page": 1030,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Aside Other synchronization mechanisms",
+            "page": 1032,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1017,
+          1034
+        ]
+      },
+      {
+        "title": "Using Threads for Parallelism",
+        "page": 1035,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Aside Event-driven programs based on threads",
+            "page": 1035,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Number of threads",
+            "page": 1039,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Number of threads",
+            "page": 1039,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Characterizing the Performance of Parallel Programs",
+            "page": 1040,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1035,
+          1041
+        ]
+      },
+      {
+        "title": "Other Concurrency Issues",
+        "page": 1042,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "12.7.1 Thread Safety",
+            "page": 1042,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.7.2 Reentrancy",
+            "page": 1045,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.7.3 Using Existing Library Functions in Threaded Programs",
+            "page": 1046,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.7.4 Races",
+            "page": 1047,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "12.7.5 Deadlocks",
+            "page": 1049,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1042,
+          1051
+        ]
+      },
+      {
+        "title": "Summary",
+        "page": 1052,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Bibliographic Notes",
+            "page": 1052,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "A. Here is the table:",
+            "page": 1059,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1052,
+          1062
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Error Handling",
+    "page": 1063,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "Error Handling in Unix Systems",
+        "page": 1064,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "Unix-Style Error Handling",
+            "page": 1064,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "Posix-Style Error Handling",
+            "page": 1064,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          },
+          {
+            "title": "GAI-Style Error Handling",
+            "page": 1064,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1064,
+          1064
+        ]
+      },
+      {
+        "title": "Error-Handling Wrappers",
+        "page": 1065,
+        "level": 2,
+        "type": "toc",
+        "children": [
+          {
+            "title": "A.2 Error-Handling Wrappers",
+            "page": 1065,
+            "level": 1,
+            "type": "subsection",
+            "children": []
+          }
+        ],
+        "page_range": [
+          1065,
+          1067
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Refs",
+    "page": 1068,
+    "level": 1,
+    "type": "toc",
+    "children": [
+      {
+        "title": "References",
+        "page": 1068,
+        "level": 1,
+        "type": "subsection",
+        "children": []
+      }
+    ],
+    "page_range": [
+      1068,
+      1073
+    ]
+  },
+  {
+    "title": "Index",
+    "page": 1074,
+    "level": 1,
+    "type": "toc",
+    "children": [],
+    "page_range": [
+      1074,
+      1105
+    ]
+  }
+]
