@@ -21,7 +21,13 @@ declare namespace NodeJS {
   }
 }
 
-// Used in Renderer process, expose in `preload.ts`
+// Used in Renderer process, exposed via contextBridge in `preload.ts`
 interface Window {
-  ipcRenderer: import('electron').IpcRenderer
+  electronAPI: {
+    openFile: (filters?: { name: string; extensions: string[] }[]) => Promise<string | null>
+    loadJsonFile: (path: string) => Promise<{ ok: boolean; data?: unknown; path?: string; error?: string }>
+    processPdf: (path: string) => Promise<{ ok: boolean; data?: unknown; error?: string }>
+    on: (...args: any[]) => void
+    off: (...args: any[]) => void
+  }
 }

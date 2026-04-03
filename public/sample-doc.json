@@ -1,0 +1,150 @@
+{
+  "title": "Sample Research Paper",
+  "page": 1,
+  "level": 0,
+  "type": "toc",
+  "page_range": [1, 20],
+  "children": [
+    {
+      "title": "Abstract",
+      "page": 1,
+      "level": 1,
+      "type": "section",
+      "page_range": [1, 1],
+      "children": []
+    },
+    {
+      "title": "1. Introduction",
+      "page": 2,
+      "level": 1,
+      "type": "section",
+      "page_range": [2, 4],
+      "children": [
+        {
+          "title": "1.1 Background",
+          "page": 2,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [2, 3],
+          "children": []
+        },
+        {
+          "title": "1.2 Motivation",
+          "page": 3,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [3, 4],
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "2. Related Work",
+      "page": 5,
+      "level": 1,
+      "type": "section",
+      "page_range": [5, 7],
+      "children": [
+        {
+          "title": "2.1 Graph Neural Networks",
+          "page": 5,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [5, 6],
+          "children": []
+        },
+        {
+          "title": "2.2 Document Parsing",
+          "page": 6,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [6, 7],
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "3. Methodology",
+      "page": 8,
+      "level": 1,
+      "type": "section",
+      "page_range": [8, 13],
+      "children": [
+        {
+          "title": "3.1 Data Collection",
+          "page": 8,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [8, 9],
+          "children": []
+        },
+        {
+          "title": "3.2 Model Architecture",
+          "page": 10,
+          "level": 2,
+          "type": "subsection",
+          "page_range": [10, 12],
+          "children": [
+            {
+              "title": "Encoder Layer",
+              "page": 10,
+              "level": 3,
+              "type": "paragraph",
+              "page_range": [10, 11],
+              "children": []
+            },
+            {
+              "title": "Attention Mechanism",
+              "page": 11,
+              "level": 3,
+              "type": "paragraph",
+              "page_range": [11, 12],
+              "children": []
+            }
+          ]
+        },
+        {
+          "title": "Table 1: Hyperparameters",
+          "page": 13,
+          "level": 2,
+          "type": "table",
+          "page_range": [13, 13],
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "4. Experiments",
+      "page": 14,
+      "level": 1,
+      "type": "section",
+      "page_range": [14, 17],
+      "children": [
+        {
+          "title": "Figure 1: Results",
+          "page": 15,
+          "level": 2,
+          "type": "figure",
+          "page_range": [15, 15],
+          "children": []
+        }
+      ]
+    },
+    {
+      "title": "5. Conclusion",
+      "page": 18,
+      "level": 1,
+      "type": "section",
+      "page_range": [18, 19],
+      "children": []
+    },
+    {
+      "title": "References",
+      "page": 20,
+      "level": 1,
+      "type": "subsection",
+      "page_range": [20, 20],
+      "children": []
+    }
+  ]
+}
