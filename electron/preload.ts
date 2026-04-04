@@ -43,5 +43,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const [channel, ...omit] = args
     return ipcRenderer.off(channel, ...omit)
   },
+  
+  /** Folder & File interactions */
   openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
+  showItemInFolder: (filePath: string) => ipcRenderer.invoke('shell:showItemInFolder', filePath),
 })

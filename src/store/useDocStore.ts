@@ -93,11 +93,8 @@ export const useDocStore = create<DocStore>((set, get) => ({
   },
 
   selectNode: (id) => {
-    const updated = get().flowNodes.map(n => ({
-      ...n,
-      isSelected: n.id === id,   // FGNode.isSelected — top-level, not nested in data
-    }))
-    set({ selectedNodeId: id, flowNodes: updated })
+    // Only update selectedNodeId—do NOT mutate flowNodes to avoid graph rebuild chaos
+    set({ selectedNodeId: id })
   },
 
   setPdfPath:      (path)        => set({ pdfPath: path }),

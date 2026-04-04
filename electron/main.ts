@@ -17,7 +17,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST
 
-const SERVER_URL = 'https://korean-sell-everywhere-organizing.trycloudflare.com/stream-scan'
+const SERVER_URL = 'http://localhost:8002/stream-scan'
 
 let win: BrowserWindow | null
 
@@ -96,7 +96,7 @@ function createWindow() {
   win.maximize()
 
   // ── Uncomment to debug blank screen ──
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
