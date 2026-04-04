@@ -22,20 +22,28 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # ─────────────────────────────────────────────
 
 def load_graph(json_path: str) -> dict:
-    """
-    Builds Hierarchical IDs (e.g., node_4, node_4_3, node_4_3_1)
-    """
     with open(json_path) as f:
         raw = json.load(f)
 
     flat = {}
 
+    # 👇 THIS IS THE FIX: Mirror React's 'normalizeInput'
+    if isinstance(raw, list):
+        root_node = {
+            "title": "Document",
+            "page": raw[0].get("page", 1) if raw else 1,
+            "level": 0,
+            "type": "toc",
+            "children": raw
+        }
+        nodes_to_traverse = [root_node]
+    else:
+        nodes_to_traverse = [raw]
+
     def traverse(nodes, parent_id=None, path_prefix=""):
+        child_ids_list = []
         for i, node in enumerate(nodes):
-            # 1. Build the path string (e.g., "4_3_1")
             current_path = f"{path_prefix}{i}"
-            
-            # 2. Create the ID
             node_id = f"node_{current_path}"
             
             node["id"] = node_id
@@ -44,20 +52,18 @@ def load_graph(json_path: str) -> dict:
             if "content" not in node or not node["content"]:
                 node["content"] = node.get("title", "")
 
-            # 3. Add to dictionary
             flat[node_id] = node
+            child_ids_list.append(node_id)
 
-            # 4. Process children, passing down the current path with an underscore!
             children = node.pop("children", [])
             node["child_ids"] = traverse(children, parent_id=node_id, path_prefix=f"{current_path}_")
             
-        return [n["id"] for n in nodes]
+        return child_ids_list
 
     # Kick it off with an empty prefix
-    traverse(raw if isinstance(raw, list) else [raw])
+    traverse(nodes_to_traverse, parent_id=None, path_prefix="")
     
     return flat
-
 
 def build_sibling_map(graph: dict) -> dict:
     """
