@@ -29,6 +29,16 @@ const RING_RADII = [
   1500,
 ]
 
+// 🚀 DYNAMIC RADIUS HELPER: Expands the universe for AI nodes automatically
+function getRadius(depth: number) {
+  if (depth <= 0) return 0;
+  if (depth < RING_RADII.length) return RING_RADII[depth];
+  // If we exceed predefined rings, add 380px per extra level
+  const lastRadius = RING_RADII[RING_RADII.length - 1];
+  const extraLevels = depth - (RING_RADII.length - 1);
+  return lastRadius + (extraLevels * 380); 
+}
+
 export function GraphCanvas() {
   const fgNodes        = useDocStore(s => s.flowNodes)
   const fgEdges        = useDocStore(s => s.flowEdges)
@@ -40,15 +50,17 @@ export function GraphCanvas() {
   const status         = useDocStore(s => s.status)
   const selectedNodeId = useDocStore(s => s.selectedNodeId)
 
+  // -- UI States --
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set())
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null)
-  const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; type: 'canvas' | 'node'; nodeId?: string } | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ x: number, y: number } | null>(null);
+  const [suggestedCards, setSuggestedCards] = useState<any[] | null>(null);
 
+  // -- Refs & Dimensions --
   const containerRef = useRef<HTMLDivElement>(null)
   const graphRef     = useRef<any>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
-
   const nodeCacheRef = useRef<Map<string, any>>(new Map())
 
   const maxDepth = useMemo(
@@ -56,6 +68,174 @@ export function GraphCanvas() {
     [fgNodes]
   )
 
+  // ─── IPC Handlers ────────────────────────────────────────────────────────────
+
+  // 1. Fetch AI Suggestions from Electron
+  const handleGenerateSuggestions = useCallback(async () => {
+    if (!selectedNodeId) return;
+
+    const storeState = useDocStore.getState();
+    const currentNodes = storeState.flowNodes;
+    const dynamicJsonPath = storeState.jsonPath; 
+
+    const selectedNode = currentNodes.find((n: any) => n.id === selectedNodeId);
+    
+    if (!selectedNode) return;
+    if (!dynamicJsonPath) {
+      console.error("🛑 No file path found in store! Make sure you save it when opening a file.");
+      return;
+    }
+
+    console.log(`🖱️ Requesting AI Cards for: ${selectedNode.label} (${selectedNode.id})`);
+    setIsGenerating(true);
+    setSuggestedCards(null); 
+
+    try {
+      const payload = {
+        node_id: selectedNode.id, 
+        json_path: dynamicJsonPath, 
+        visited_ids: []
+      };
+
+      const data = await window.electronAPI.getAiCards(payload);
+
+      if (!data || data.error) {
+        console.error("🛑 AI Engine Error:", data?.error);
+        return; 
+      }
+
+      console.log("🧠 GEMINI CARDS ARRIVED!", data);
+
+      const fetchedCards: any[] = [];
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith('card_')) {
+          fetchedCards.push({
+            key: key, 
+            ...data[key]
+          });
+        }
+      });
+
+      setSuggestedCards(fetchedCards); 
+
+    } catch (error: any) {
+      console.error("❌ IPC Error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [selectedNodeId]);
+
+  // 2. Add an AI suggestion card to the actual graph store
+  const handleAddCardToGraph = useCallback((card: any, cardKey: string) => {
+    if (!selectedNodeId) return;
+    
+    const storeState = useDocStore.getState();
+    const currentNodes = storeState.flowNodes;
+    const selectedNode = currentNodes.find((n: any) => n.id === selectedNodeId);
+    if (!selectedNode) return;
+
+    // Find the maximum depth of regular document nodes
+    const docNodes = currentNodes.filter((n: any) => n.nodeType !== 'ai_suggestion');
+    const docMaxDepth = Math.max(...docNodes.map((n: any) => n.depth ?? 0), 1);
+
+    const aiNodeId = `ai_${selectedNodeId}_${cardKey}_${Date.now()}`; 
+
+    const newNode = {
+      id: aiNodeId,
+      label: card.concept || card.style?.replace('_', ' ').toUpperCase() || "AI Suggestion", 
+      depth: docMaxDepth + 1, // Forces the node to the outermost AI orbit
+      nodeType: 'ai_suggestion', 
+      page: 'AI', 
+      data: { label: card.suggestion },
+      isSelected: false,
+      x: (selectedNode.x || 0) + (Math.random() - 0.5) * 120,
+      y: (selectedNode.y || 0) + (Math.random() - 0.5) * 120,
+    };
+
+    const newEdge = {
+      id: `link_${selectedNodeId}_${aiNodeId}`,
+      source: selectedNodeId,
+      target: aiNodeId,
+      color: '#fbbf24', 
+    };
+
+    useDocStore.setState((state: any) => ({
+      flowNodes: [...state.flowNodes, newNode],
+      flowEdges: [...state.flowEdges, newEdge]
+    }));
+
+    setSuggestedCards((prev) => prev ? prev.filter((c) => c.key !== cardKey) : null);
+    
+  }, [selectedNodeId]);
+
+// 3. Save ONLY the AI Nodes to a NEW JSON file
+  const handleSaveGraph = useCallback(async () => {
+    const storeState = useDocStore.getState();
+    const currentNodes = storeState.flowNodes;
+    const currentEdges = storeState.flowEdges as any[];
+    const filePath = storeState.jsonPath; 
+  
+    console.log("💾 Preparing AI nodes for separate save...");
+
+    // 1. FILTER: Grab ONLY the AI suggestion nodes
+    const aiNodesOnly = currentNodes.filter((n: any) => n.nodeType === 'ai_suggestion');
+
+    if (aiNodesOnly.length === 0) {
+      alert("No AI suggestions to save yet!");
+      return;
+    }
+  
+    // 2. FORMAT: Map them properly with their parent IDs
+    const formattedData = aiNodesOnly.map((node: any) => {
+      // Find the edge where THIS node is the target (to find its parent)
+      const parentEdge = currentEdges.find((e: any) => {
+        const targetId = typeof e.target === 'object' ? e.target.id : e.target;
+        return targetId === node.id;
+      });
+  
+      const parentId = parentEdge 
+        ? (typeof parentEdge.source === 'object' ? (parentEdge.source as any).id : parentEdge.source) 
+        : null;
+  
+      return {
+        id: node.id,
+        label: node.label,
+        suggestion_text: node.data?.label || "",
+        depth: node.depth,
+        page: node.page,
+        parent_id: parentId, // 👈 Crucial: Links back to the original doc's node
+        is_new: true
+      };
+    });
+
+    // 3. CREATE NEW FILE NAME: Don't overwrite the original!
+    let newFilePath = "";
+    if (filePath) {
+      newFilePath = filePath.endsWith('.json') 
+        ? filePath.replace('.json', '_ai_suggestions.json') 
+        : `${filePath}_ai_suggestions.json`;
+    }
+  
+    try {
+      const response = await window.electronAPI.saveGraphJson({
+        json_path: newFilePath || "", // Backend handles fallback if empty
+        graph_data: formattedData
+      });
+  
+      if (response.error) {
+        console.error("❌ Save failed:", response.error);
+        alert("Failed to save AI nodes!");
+      } else {
+        console.log(`✅ AI nodes saved successfully to a NEW file: ${response.saved_path}`);
+        alert("AI Suggestions saved to a new file!");
+      }
+    } catch (err) {
+      console.error("❌ IPC Error during save:", err);
+    }
+  }, []);
+
+  // ─── Graph Logic & Lifecycle ─────────────────────────────────────────────────
+  
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -82,7 +262,6 @@ export function GraphCanvas() {
         node = { ...src, __hasBeenDragged: false }
         cache.set(src.id, node)
       } else {
-        // Preserve drag state across component updates (e.g., expanding nodes)
         const savedFx = node.fx
         const savedFy = node.fy
         const savedDragged = node.__hasBeenDragged
@@ -117,7 +296,6 @@ export function GraphCanvas() {
 
     const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id) || manualNodes.some(mn => mn.id === n.id))
 
-    // Build hierarchy
     const parentOf = new Map<string, string>()
     fgEdges.forEach(e => {
       const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
@@ -146,7 +324,6 @@ export function GraphCanvas() {
       n.hasChildren = (childrenOf.get(n.id) || []).length > 0
     })
 
-    // Assign reading order relative to parent (starts at 1 for each group of children)
     const assignReadingOrder = (id: string, index: number): void => {
       const node = cache.get(id)
       if (node) {
@@ -161,7 +338,6 @@ export function GraphCanvas() {
 
     const roots = allNodes.filter(n => !n._parentId)
     
-    // Do depth-first reading order assignment starting with the roots
     let rootIndex = 1
     roots.forEach(r => assignReadingOrder(r.id, rootIndex++))
     
@@ -169,7 +345,6 @@ export function GraphCanvas() {
       roots[0].__isRingDrawer = true
     }
 
-    // Mathematical arc calculation for default positions
     const weight = new Map<string, number>()
     const calcWeight = (id: string) => {
       const kids = childrenOf.get(id) || []
@@ -209,33 +384,15 @@ export function GraphCanvas() {
       currentRootStart += slice
     })
 
-    // Assign positions. If they haven't been dragged, lock them to the math angle.
     allNodes.forEach(n => {
-      const isManual = n.nodeType === 'manual'
-      if (isManual) {
-        // Manual nodes are free-floating, don't constrain to rings
-        n._dragRadius = 0
-        // Use stored position from manual node if available
-        const manualNode = manualNodes.find(mn => mn.id === n.id)
-        if (manualNode?.x != null && manualNode?.y != null) {
-          n.x = manualNode.x
-          n.y = manualNode.y
-        } else if (n.x == null || n.y == null) {
-          // Set default position if none exists
-          n.x = Math.random() * 400 - 200
-          n.y = Math.random() * 400 - 200
-        }
-      } else {
-        const d = n.depth ?? 0
-        const targetR = RING_RADII[Math.min(d, RING_RADII.length - 1)]
-        const radiusToUse = d === 0 ? 0 : targetR
-        
-        n._dragRadius = radiusToUse 
+      const d = n.depth ?? 0
+      const radiusToUse = getRadius(d); 
+      
+      n._dragRadius = radiusToUse 
 
-        const angle = targetAngle.get(n.id) ?? 0
-        n.x = radiusToUse * Math.cos(angle)
-        n.y = radiusToUse * Math.sin(angle)
-      }
+      const angle = targetAngle.get(n.id) ?? 0
+      n.x = radiusToUse * Math.cos(angle)
+      n.y = radiusToUse * Math.sin(angle)
     })
 
     const visibleIds = new Set<string>()
@@ -317,10 +474,11 @@ export function GraphCanvas() {
         const nx = node.x ?? 0
         const ny = node.y ?? 0
         const depth = node.depth ?? 0
-        const targetR = depth === 0 ? 0 : RING_RADII[Math.min(depth, RING_RADII.length - 1)]
+        const targetR = getRadius(depth);
+        
         const dist = Math.sqrt(nx * nx + ny * ny) || 1
         const diff = targetR - dist
-        const strength = 1.6 * alpha  // Strong orbit locking
+        const strength = 1.6 * alpha  
         node.vx += (nx / dist) * diff * strength
         node.vy += (ny / dist) * diff * strength
       })
@@ -382,7 +540,6 @@ export function GraphCanvas() {
     fg.d3ReheatSimulation?.()
   }, [graphData])
 
-  // ─── Custom Rail Drag Handlers ───────────────────────────────────────────────
   const handleNodeDrag = useCallback((node: any) => {
     node.__hasBeenDragged = true
     const isManual = node.nodeType === 'manual'
@@ -399,9 +556,7 @@ export function GraphCanvas() {
       node.fy = 0
       return
     }
-    // Calculate the angle based on where the user pulled the node
     const angle = Math.atan2(node.y, node.x)
-    // Snap the node's position to that angle on its specific ring
     node.x = r * Math.cos(angle)
     node.y = r * Math.sin(angle)
     node.fx = node.x
@@ -443,14 +598,13 @@ export function GraphCanvas() {
         ctx.strokeStyle = 'rgba(190, 180, 220, 0.12)'
         ctx.lineWidth = 1.5 / globalScale
         for (let i = 1; i <= maxDepth; i++) {
-          const radius = RING_RADII[Math.min(i, RING_RADII.length - 1)]
+          const radius = getRadius(i); 
           if (radius) {
             ctx.beginPath()
             ctx.arc(0, 0, radius, 0, TAU)
             ctx.stroke()
           }
         }
-
         ctx.restore()
       }
 
@@ -505,7 +659,6 @@ export function GraphCanvas() {
         }
       }
 
-      // Draw reading order number perfectly inside the centre of the node
       if (node._readingOrder != null) {
         ctx.save()
         ctx.font = `600 ${Math.max(7, 8 / globalScale)}px monospace`
@@ -524,7 +677,6 @@ export function GraphCanvas() {
           return
         }
 
-        // Maximum 16 characters unless highlighted/hovered
         const isTextHighlighted = inHoverLineage || isActivated
         const maxChars = 16
         const label = (!isTextHighlighted && raw.length > maxChars)
@@ -578,130 +730,38 @@ export function GraphCanvas() {
     [maxDepth]
   )
 
-  // Check if targetId is a descendant of sourceId (traverses manual node hierarchy)
-  const isDescendantOf = useCallback((sourceId: string, targetId: string): boolean => {
-    const visited = new Set<string>()
+  // ─── Interaction Handlers ────────────────────────────────────────────────────
 
-    const traverse = (nodeId: string): boolean => {
-      if (visited.has(nodeId)) return false
-      visited.add(nodeId)
+  const closeMenu = useCallback(() => {
+    setMenuPos(null);
+  }, []);
 
-      if (nodeId === targetId) return true
-
-      const node = manualNodes.find(mn => mn.id === nodeId)
-      if (!node) return false
-
-      // Recursively check all ancestors (parents and their parents)
-      for (const parentId of node.parents) {
-        if (traverse(parentId)) return true
-      }
-
-      return false
-    }
-
-    return traverse(sourceId)
-  }, [manualNodes])
-
-  const handleNodeClick = useCallback((n: any, event?: any) => {
-    const isManual = n.nodeType === 'manual'
-    const isShiftPressed = event?.shiftKey
-
-    if (connectingFrom) {
-      // In connection mode - connect to this node
-      if (connectingFrom !== n.id) {
-        const manualNode = manualNodes.find(mn => mn.id === connectingFrom)
-        if (manualNode && !manualNode.parents.includes(n.id)) {
-          // Check for cycles: n.id cannot be a descendant of connectingFrom
-          if (isDescendantOf(n.id, connectingFrom)) {
-            console.warn('Cannot connect: would create a cycle')
-            setConnectingFrom(null)
-            return
-          }
-
-          // Add this node as parent to the connecting manual node
-          updateManualNode(connectingFrom, {
-            parents: [...manualNode.parents, n.id],
-            isLinked: false  // Mark as linked now
-          })
-        }
-      }
-      setConnectingFrom(null)
-      return
-    }
-
-    if (isManual && isShiftPressed) {
-      // Only allow shift-click if node is not already linked
-      const manualNode = manualNodes.find(mn => mn.id === n.id)
-      if (manualNode && !manualNode.isLinked) {
-        console.warn('This node is already linked and cannot be connected to another parent')
-        return
-      }
-      // Start connection mode
-      setConnectingFrom(n.id)
-      return
-    }
-
-    if (n.hasChildren) {
-      setExpandedNodeIds(prev => {
-        const next = new Set(prev)
-        if (next.has(n.id)) next.delete(n.id)
-        else next.add(n.id)
-        return next
-      })
-    }
+  const handleNodeClick = useCallback((n: any) => {
+    closeMenu(); 
+    setExpandedNodeIds(prev => {
+      const next = new Set(prev)
+      if (next.has(n.id)) next.delete(n.id)
+      else next.add(n.id)
+      return next
+    })
     selectNode(n.id)
-  }, [selectNode, connectingFrom, manualNodes, updateManualNode, isDescendantOf])
+  }, [selectNode, closeMenu])
 
   const handleBackgroundClick = useCallback(() => {
-    selectNode(null)
-    setConnectingFrom(null)
-    setContextMenu(null)
-  }, [selectNode])
+    closeMenu(); 
+    selectNode(null);
+    setSuggestedCards(null); 
+  }, [selectNode, closeMenu])
 
-  const handleContextMenu = useCallback((event: React.MouseEvent) => {
-    event.preventDefault()
-    const rect = containerRef.current?.getBoundingClientRect()
-    if (rect) {
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
-      setContextMenu({ x, y, type: 'canvas' })
-    }
-  }, [])
+  const handleNodeRightClick = useCallback((node: any, event: MouseEvent) => {
+    selectNode(node.id);
+    setMenuPos({ x: event.clientX, y: event.clientY });
+  }, [selectNode]);
 
-  const handleNodeRightClick = useCallback((node: any, event: any) => {
-    event.preventDefault()
-    const isManual = node.nodeType === 'manual'
-    if (isManual) {
-      const rect = containerRef.current?.getBoundingClientRect()
-      if (rect) {
-        const x = event.clientX - rect.left
-        const y = event.clientY - rect.top
-        setContextMenu({ x, y, type: 'node', nodeId: node.id })
-      }
-    }
-  }, [])
-
-  const handleAddManualNode = useCallback((x?: number, y?: number) => {
-    const id = `manual-${Date.now()}`
-    const label = `Manual Node ${manualNodes.length + 1}`
-    const path = `user-notes/${id}.md`
-    const node = {
-      id,
-      parents: [],
-      path,
-      label,
-      x, // Store initial position
-      y,
-      isLinked: true,  // Newly created nodes can be linked
-    }
-    addManualNode(node)
-    setContextMenu(null) // Close context menu
-  }, [manualNodes.length, addManualNode])
-
-  const handleDeleteManualNode = useCallback((nodeId: string) => {
-    deleteManualNode(nodeId)
-    setContextMenu(null)
-  }, [deleteManualNode])
+  const handleBackgroundRightClick = useCallback(() => {
+    closeMenu();
+    selectNode(null);
+  }, [selectNode, closeMenu]);
 
   const linkColor = useCallback((link: any) => {
     const src = typeof link.source === 'object' ? link.source?.id : link.source
@@ -734,12 +794,14 @@ export function GraphCanvas() {
     return sDepth === tDepth ? 1.15 : 0.85
   }, [])
 
+  // ─── Render ──────────────────────────────────────────────────────────────────
+
   if (status === 'idle') {
     return (
       <div className="graph-empty" style={{ background: '#0d0f12' }}>
         <div className="graph-empty-content">
           <svg width="56" height="56" viewBox="0 0 24 24" fill="none"
-               stroke="#bf95f9" strokeWidth="1" opacity="0.45">
+              stroke="#bf95f9" strokeWidth="1" opacity="0.45">
             <circle cx="12" cy="5" r="3" />
             <circle cx="4" cy="19" r="3" />
             <circle cx="20" cy="19" r="3" />
@@ -768,7 +830,7 @@ export function GraphCanvas() {
     <div
       className="graph-canvas"
       ref={containerRef}
-      onContextMenu={handleContextMenu}
+      onContextMenu={(e) => e.preventDefault()}
       style={{
         width: '100%',
         height: '100%',
@@ -789,18 +851,23 @@ export function GraphCanvas() {
           nodeId="id"
           backgroundColor="#0d0f12"
           warmupTicks={0}
-          cooldownTicks={100} // Allow light physics simulation
+          cooldownTicks={100}
           linkColor={linkColor}
           linkWidth={linkWidth}
           linkCurvature={linkCurvature}
           linkDirectionalArrowLength={0}
           linkDirectionalParticles={0}
-          enableNodeDrag={true} // Enable dragging
-          onNodeDrag={handleNodeDrag}       // Intercept drag to lock to ring
-          onNodeDragEnd={handleNodeDragEnd} // Pin upon release
+          enableNodeDrag={true} 
+          onNodeDrag={handleNodeDrag}       
+          onNodeDragEnd={handleNodeDragEnd} 
+          
           onNodeClick={handleNodeClick}
           onBackgroundClick={handleBackgroundClick}
-          onNodeRightClick={handleNodeRightClick}
+          onNodeRightClick={handleNodeRightClick} 
+          onBackgroundRightClick={handleBackgroundRightClick}
+          
+          onZoom={closeMenu}
+
           onNodeHover={(node: any) => {
             setHoveredNodeId(node?.id ?? null)
             if (containerRef.current) {
@@ -815,6 +882,33 @@ export function GraphCanvas() {
           nodePointerAreaPaint={paintPointer}
           nodeCanvasObjectMode={() => 'replace'}
         />
+      </div>
+
+      {/* 💾 SAVE BUTTON */}
+      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 100 }}>
+        <button
+          onClick={handleSaveGraph}
+          style={{
+            background: 'rgba(78, 201, 160, 0.15)', 
+            color: '#4ec9a0',
+            border: '1px solid rgba(78, 201, 160, 0.4)',
+            borderRadius: '8px',
+            padding: '8px 16px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            transition: 'all 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(78, 201, 160, 0.25)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(78, 201, 160, 0.15)'}
+        >
+          💾 Save Graph
+        </button>
       </div>
 
       <div
@@ -923,76 +1017,137 @@ export function GraphCanvas() {
         </div>
       )}
 
-      {/* Context Menu */}
-      {contextMenu && (
+      {menuPos && selectedNodeId && (
+        <div
+          style={{
+            position: 'fixed',
+            top: menuPos.y,
+            left: menuPos.x,
+            display: 'flex',
+            flexDirection: 'column',
+            background: 'rgba(15, 18, 24, 0.95)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(190, 149, 249, 0.3)', 
+            borderRadius: '8px',
+            padding: '4px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+            zIndex: 9999, 
+            minWidth: '160px',
+            transform: 'translate(2px, 2px)', 
+          }}
+        >
+          <button
+            onClick={() => {
+              handleGenerateSuggestions();
+              closeMenu(); 
+            }}
+            disabled={isGenerating}
+            style={{
+              background: 'transparent',
+              color: isGenerating ? '#9ca3af' : '#e2e8f0',
+              border: 'none',
+              borderRadius: '4px',
+              padding: '8px 12px',
+              fontSize: '13px',
+              cursor: isGenerating ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              textAlign: 'left',
+              width: '100%',
+            }}
+            onMouseOver={(e) => {
+              if (!isGenerating) e.currentTarget.style.background = 'rgba(191, 149, 249, 0.15)'
+            }}
+            onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            {isGenerating ? '⏳ Thinking...' : '✨ Get AI Suggestion'}
+          </button>
+        </div>
+      )}
+
+      {suggestedCards && suggestedCards.length > 0 && (
         <div
           style={{
             position: 'absolute',
-            left: contextMenu.x,
-            top: contextMenu.y,
-            background: 'rgba(10,12,16,0.95)',
-            border: '1px solid rgba(190,170,255,0.3)',
-            borderRadius: 8,
-            padding: '8px 0',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-            zIndex: 1000,
-            minWidth: 150,
+            top: 20,
+            right: 20,
+            width: '320px',
+            maxHeight: 'calc(100% - 40px)',
+            overflowY: 'auto',
+            background: 'rgba(15, 18, 24, 0.95)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(190, 149, 249, 0.4)',
+            borderRadius: '12px',
+            padding: '16px',
+            zIndex: 50,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.6)',
+            fontFamily: '-apple-system,"Segoe UI",sans-serif',
           }}
         >
-          {contextMenu.type === 'canvas' && (
-            <button
-              onClick={() => {
-                // Use screen2GraphCoords to convert coordinates properly
-                const graphCoords = graphRef.current?.screen2GraphCoords(contextMenu.x, contextMenu.y)
-                handleAddManualNode(graphCoords?.x, graphCoords?.y)
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <h3 style={{ color: '#e2e8f0', margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>✨</span> AI Suggestions
+            </h3>
+            <button 
+              onClick={() => setSuggestedCards(null)} 
+              style={{ 
+                background: 'transparent', border: 'none', color: '#9ca3af', 
+                cursor: 'pointer', fontSize: '16px', padding: '4px' 
               }}
+              title="Close"
+            >
+              ✖
+            </button>
+          </div>
+          
+          {suggestedCards.map((card) => (
+            <div 
+              key={card.key} 
               style={{
-                width: '100%',
-                padding: '8px 16px',
-                background: 'none',
-                border: 'none',
-                color: 'rgba(220,214,240,0.9)',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: 14,
-                fontFamily: '-apple-system,"Segoe UI",sans-serif',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(191, 149, 249, 0.2)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'none'
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(190,180,220,0.15)',
+                borderRadius: '8px', 
+                padding: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
               }}
             >
-              Add Manual Node
-            </button>
-          )}
-          {contextMenu.type === 'node' && contextMenu.nodeId && (
-            <button
-              onClick={() => handleDeleteManualNode(contextMenu.nodeId!)}
-              style={{
-                width: '100%',
-                padding: '8px 16px',
-                background: 'none',
-                border: 'none',
-                color: 'rgba(239, 68, 68, 0.9)', // Red color for delete
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: 14,
-                fontFamily: '-apple-system,"Segoe UI",sans-serif',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'none'
-              }}
-            >
-              Delete Node
-            </button>
-          )}
+              <div style={{ color: '#bf95f9', fontWeight: 'bold', fontSize: '13px' }}>
+                {card.concept || card.style?.replace('_', ' ').toUpperCase() || 'New Idea'}
+              </div>
+              <div style={{ color: '#cbd5e1', fontSize: '12.5px', lineHeight: '1.4' }}>
+                {card.suggestion}
+              </div>
+              <button 
+                onClick={() => handleAddCardToGraph(card, card.key)}
+                style={{
+                  width: '100%', 
+                  background: 'rgba(191, 149, 249, 0.1)',
+                  color: '#bf95f9', 
+                  border: '1px solid rgba(191, 149, 249, 0.3)',
+                  borderRadius: '6px', 
+                  padding: '8px 0', 
+                  fontSize: '12px', 
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  marginTop: '4px',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(191, 149, 249, 0.2)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(191, 149, 249, 0.1)'}
+              >
+                + Add to Graph
+              </button>
+            </div>
+          ))}
         </div>
       )}
+
     </div>
   )
 }

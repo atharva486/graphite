@@ -48,7 +48,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const [channel, ...omit] = args
     return ipcRenderer.off(channel, ...omit)
   },
-  
+  saveGraphJson: (payload:any) => ipcRenderer.invoke('save-graph-json', payload),
   /** Folder & File interactions */
   openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
   showItemInFolder: (filePath: string) => ipcRenderer.invoke('shell:showItemInFolder', filePath),

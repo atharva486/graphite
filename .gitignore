@@ -17,6 +17,7 @@ s1.json
 test_book_structure.json
 test_book.pdf
 
+./ai/.env
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

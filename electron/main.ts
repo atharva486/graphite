@@ -146,6 +146,7 @@ ipcMain.handle('get-ai-cards', async (_event, payload) => {
     return { error: `Failed to connect to Python: ${e.message}` };
   }
 });
+
 ipcMain.handle('dialog:openFile', async (_event, filters?: { name: string; extensions: string[] }[]) => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
@@ -157,6 +158,39 @@ ipcMain.handle('dialog:openFile', async (_event, filters?: { name: string; exten
   })
   return result.canceled || !result.filePaths.length ? null : result.filePaths[0]
 })
+
+ipcMain.handle('save-graph-json', async (_event, payload) => {
+  try {
+    // 1. Establish the path
+    let finalPath = payload.json_path;
+
+    // If the frontend didn't send a path (e.g., file isn't created yet), use a fixed fallback
+    if (!finalPath) {
+      // Creates a fixed file named 'my-graph.json' in the user's Documents folder
+      const documentsPath = app.getPath('documents'); 
+      finalPath = path.join(documentsPath, 'my-graph.json');
+      console.log("⚠️ No path provided. Using fixed fallback path:", finalPath);
+    }
+
+    console.log("[MAIN] Saving graph to:", finalPath);
+
+    // 2. CRITICAL: Ensure the directory actually exists before writing!
+    // If the folder isn't made yet, this makes it automatically.
+    const dirPath = path.dirname(finalPath);
+    await fs.promises.mkdir(dirPath, { recursive: true });
+
+    // 3. Convert the Javascript object back to a pretty JSON string
+    const jsonString = JSON.stringify(payload.graph_data, null, 2);
+    
+    // 4. Write it directly to the file (this creates the file if it doesn't exist)
+    await fs.promises.writeFile(finalPath, jsonString, 'utf-8');
+    
+    return { success: true, saved_path: finalPath };
+  } catch (error: any) {
+    console.error("❌ [MAIN] Save failed:", error);
+    return { error: error.message };
+  }
+});
 
 // ─── IPC: Open folder ─────────────────────────────────────────────────────────
 

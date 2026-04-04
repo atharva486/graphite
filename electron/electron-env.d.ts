@@ -14,9 +14,17 @@ interface Window {
     openFile: (
       filters?: { name: string; extensions: string[] }[]
     ) => Promise<string | null>
-    // Add this inside the electronAPI object:
-getAiCards: (payload: any) => Promise<any>
 
+    // 🚀 Updated AI fetcher with strict types
+    getAiCards: (
+      payload: { node_id: string; json_path: string; visited_ids?: string[] }
+    ) => Promise<any>
+
+    // 💾 NEW: Graph JSON Saver
+// 💾 NEW: Graph JSON Saver
+    saveGraphJson: (
+      payload: { json_path: string | null | undefined; graph_data: any[] } // 👈 Added null | undefined
+    ) => Promise<{ success?: boolean; saved_path?: string; error?: string }>
     loadJsonFile: (
       filePath: string
     ) => Promise<{ ok: boolean; data?: unknown; path?: string; error?: string }>
