@@ -1,26 +1,35 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDocStore } from '../store/useDocStore'
+
+// --- react-pdf-viewer imports ---
+import { Viewer, Worker } from '@react-pdf-viewer/core'
+import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation'
+
+// --- Required CSS ---
+import '@react-pdf-viewer/core/lib/styles/index.css'
 
 export function PdfViewer() {
   const { pdfPath, selectedNodeId, flowNodes } = useDocStore()
-  const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Find selected node to get page/bbox info
   const selectedNode = selectedNodeId
     ? flowNodes.find((n) => n.id === selectedNodeId)
     : null
-  const page = selectedNode?.data?.page ?? 1
+    
+  const page = selectedNode?.page ?? 1
 
-  // When selection changes, try to navigate to the correct page
+  // 1. Initialize the navigation plugin
+  const pageNavigationPluginInstance = pageNavigationPlugin()
+  const { jumpToPage } = pageNavigationPluginInstance
+
+  // 2. Safely jump to the page when the Zustand state changes
   useEffect(() => {
-    if (iframeRef.current && pdfPath) {
-      const url = `file://${pdfPath}#page=${page}`
-      if (iframeRef.current.src !== url) {
-        iframeRef.current.src = url
-      }
+    if (jumpToPage) {
+      // BUGFIX: react-pdf-viewer is zero-indexed! Page 1 is index 0.
+      jumpToPage(page - 1)
     }
-  }, [page, pdfPath])
+  }, [page, jumpToPage])
 
+  // --- Empty State ---
   if (!pdfPath) {
     return (
       <aside className="pdf-viewer pdf-viewer--empty">
@@ -42,22 +51,28 @@ export function PdfViewer() {
     )
   }
 
+  // --- Loaded State ---
   return (
     <aside className="pdf-viewer">
       <div className="pdf-viewer-header">
         <span>PDF Viewer</span>
         {selectedNode && (
           <span className="pdf-viewer-badge">
-            {selectedNode.data.label} · p.{page}
+            {selectedNode.label} · p.{page}
           </span>
         )}
       </div>
-      <iframe
-        ref={iframeRef}
-        src={`file://${pdfPath}#page=${page}`}
-        className="pdf-iframe"
-        title="PDF Document"
-      />
+      
+      {/* 3. The Viewer must be wrapped in a Worker so it doesn't freeze the UI */}
+      <div className="pdf-iframe" style={{ overflow: 'hidden' }}>
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+          <Viewer
+            fileUrl={`file://${pdfPath}`}
+            plugins={[pageNavigationPluginInstance]}
+            initialPage={page - 1} // zero-indexed
+          />
+        </Worker>
+      </div>
     </aside>
   )
 }

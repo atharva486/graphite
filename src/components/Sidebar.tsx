@@ -8,7 +8,7 @@ interface SidebarProps {
 export function Sidebar({ className }: SidebarProps) {
   const { docTree, selectedNodeId, selectNode } = useDocStore()
 
-  if (!docTree) {
+  if (!docTree){
     return (
       <aside className={`sidebar sidebar--empty ${className ?? ''}`}>
         <div className="sidebar-header">

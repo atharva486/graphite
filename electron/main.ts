@@ -10,14 +10,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const MAIN_DIST  = path.join(process.env.APP_ROOT, 'dist-electron')
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST
 
-const SERVER_URL = 'https://korean-sell-everywhere-organizing.trycloudflare.com/stream-scan'
+const SERVER_URL = 'https://incurred-supply-entering-strange.trycloudflare.com/stream-scan'
 
 let win: BrowserWindow | null
 
@@ -95,8 +95,8 @@ function createWindow() {
 
   win.maximize()
 
-  // ── Uncomment to debug blank screen ──
-  // win.webContents.openDevTools()
+  // ── Open DevTools to capture errors ──
+  win.webContents.openDevTools()
 
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
@@ -120,13 +120,41 @@ function createWindow() {
 
 // ─── IPC: Open file ───────────────────────────────────────────────────────────
 
+
+// ─── IPC: AI Gemini Cards ──────────────────────────────────────────────────────
+// 👇 ADD THIS BLOCK TO main.ts
+ipcMain.handle('get-ai-cards', async (_event, payload) => {
+  try {
+    console.log("[MAIN] Asking Python for cards:", payload.node_id);
+    
+    const response = await fetch('http://localhost:8005/get-cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        node_id: payload.node_id,       // The ID of the node clicked
+        json_path: payload.json_path,   // The absolute path to the file
+        visited_ids: payload.visited_ids || []
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      return { error: `Python Server Error: ${errText}` };
+    }
+
+    return await response.json(); // Sends the Gemini cards back to React
+  } catch (e: any) {
+    console.error("[MAIN] Fetch failed:", e);
+    return { error: `Failed to connect to Python: ${e.message}` };
+  }
+});
 ipcMain.handle('dialog:openFile', async (_event, filters?: { name: string; extensions: string[] }[]) => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
     filters: filters ?? [
       { name: 'Supported Files', extensions: ['json', 'pdf'] },
       { name: 'JSON', extensions: ['json'] },
-      { name: 'PDF',  extensions: ['pdf'] },
+      { name: 'PDF', extensions: ['pdf'] },
     ],
   })
   return result.canceled || !result.filePaths.length ? null : result.filePaths[0]
@@ -153,6 +181,8 @@ ipcMain.handle('json:loadFile', async (_event, filePath: string) => {
   }
 })
 
+
+
 // ─── IPC: Show file in OS file manager ───────────────────────────────────────
 // ← THIS WAS MISSING — caused unhandled IPC rejection → blank screen
 
@@ -165,7 +195,7 @@ ipcMain.handle('shell:showItemInFolder', (_event, filePath: string) => {
 ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: string) => {
   try {
     const fileBuffer = fs.readFileSync(pdfPath)
-    const fileName   = path.basename(pdfPath)
+    const fileName = path.basename(pdfPath)
     const outputPath = resolveOutputPath(pdfPath, outputDir)
 
     fs.mkdirSync(path.dirname(outputPath), { recursive: true })
@@ -193,9 +223,9 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
 
     let tree: DocNode[] | null = null
     let totalEnriched = 0
-    const reader  = response.body.getReader()
+    const reader = response.body.getReader()
     const decoder = new TextDecoder()
-    let buffer    = ''
+    let buffer = ''
 
     while (true) {
       const { done, value } = await reader.read()
@@ -216,7 +246,7 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
 
         if (data.status === 'init') {
           tree = data.tree as DocNode[]
-          const allPages   = [...new Set(collectAllPages(tree))].sort((a, b) => a - b)
+          const allPages = [...new Set(collectAllPages(tree))].sort((a, b) => a - b)
           const totalPages = allPages.length > 0 ? Math.max(...allPages) : 0
           attachPageRanges(tree, allPages, totalPages)
 
@@ -224,7 +254,7 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
           const [start, end] = data.range as [number, number]
           const leaf = findLeafByRange(tree, start, end)
           if (leaf) {
-            leaf.children  = data.sub_headings as DocNode[]
+            leaf.children = data.sub_headings as DocNode[]
             totalEnriched += leaf.children.length
           }
 
@@ -233,9 +263,9 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
           const sizeKb = (fs.statSync(outputPath).size / 1024).toFixed(1)
           event.sender.send('stream:chunk', JSON.stringify({
             status: 'saved',
-            path:   outputPath,
-            size:   `${sizeKb} KB`,
-            total:  totalEnriched,
+            path: outputPath,
+            size: `${sizeKb} KB`,
+            total: totalEnriched,
           }))
         }
       }
