@@ -106,6 +106,11 @@ export function GraphCanvas() {
       }
     })
 
+    // Mark nodes that have children
+    allNodes.forEach(n => {
+      n.hasChildren = (childrenOf.get(n.id) || []).length > 0
+    })
+
     // Assign reading order relative to parent (starts at 1 for each group of children)
     const assignReadingOrder = (id: string, index: number): void => {
       const node = cache.get(id)
@@ -350,7 +355,7 @@ export function GraphCanvas() {
 
       const depth = node.depth ?? 0
       const isSelected = selectedNodeId === node.id
-      const isExpanded = expandedNodeIds.has(node.id)
+      const isExpanded = expandedNodeIds.has(node.id) && node.hasChildren
       const isHovered = hoveredNodeId === node.id
       const inHoverLineage = activeLineageIds.has(node.id)
       const isActivated = isSelected || isExpanded
@@ -471,13 +476,15 @@ export function GraphCanvas() {
   )
 
   const handleNodeClick = useCallback((n: any) => {
-    setExpandedNodeIds(prev => {
-      const next = new Set(prev)
-      if (next.has(n.id)) next.delete(n.id)
-      else next.add(n.id)
-      return next
-    })
-    selectNode(null)
+    if (n.hasChildren) {
+      setExpandedNodeIds(prev => {
+        const next = new Set(prev)
+        if (next.has(n.id)) next.delete(n.id)
+        else next.add(n.id)
+        return next
+      })
+    }
+    selectNode(n.id)
   }, [selectNode])
 
   const handleBackgroundClick = useCallback(() => selectNode(null), [selectNode])
