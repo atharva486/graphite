@@ -96,7 +96,6 @@ export function GraphCanvas() {
     const liveIds = new Set(fgNodes.map(n => n.id))
     const cache = nodeCacheRef.current
 
-    // Update cached nodes in place so physics state is preserved.
     for (const src of fgNodes) {
       const existing = cache.get(src.id)
       const node = existing ?? { ...src }
@@ -129,8 +128,6 @@ export function GraphCanvas() {
       }
     })
 
-    // Stable target angle assignment.
-    // Roots get deterministic angles. Children inherit a slot near their parent.
     const targetAngle = new Map<string, number>()
 
     const getAngle = (id: string) => {
@@ -169,8 +166,6 @@ export function GraphCanvas() {
 
       if (!kids.length) return
 
-      // Children stay fairly tight so the structure reads as a cluster,
-      // not a fan explosion. The spread still scales with count.
       const span = clamp(0.34 + kids.length * 0.08, 0.34, 1.0)
       const step = kids.length > 1 ? span / (kids.length - 1) : 0
 
@@ -227,21 +222,44 @@ export function GraphCanvas() {
     return { nodes: filteredNodes, links: filteredLinks }
   }, [fgNodes, fgEdges, selectedNodeId, expandedNodeIds])
 
+  // --- Calculate Active Lineage Path ---
+  // Traces up to the root, and includes immediate children of the hovered node
+  const activeLineageIds = useMemo(() => {
+    const ids = new Set<string>()
+    if (!hoveredNodeId) return ids
+
+    const nodes = graphData.nodes as any[]
+    const nodeMap = new Map(nodes.map(n => [n.id, n]))
+
+    // Trace ancestors
+    let currentId: string | null = hoveredNodeId
+    while (currentId) {
+      ids.add(currentId)
+      const node = nodeMap.get(currentId)
+      currentId = node?._parentId ?? null
+    }
+
+    // Add immediate children
+    nodes.forEach(n => {
+      if (n._parentId === hoveredNodeId) {
+        ids.add(n.id)
+      }
+    })
+
+    return ids
+  }, [hoveredNodeId, graphData.nodes])
+
   useEffect(() => {
     const fg = graphRef.current
     if (!fg) return
 
     const nodes = graphData.nodes as any[]
 
-    // Keep base link force very gentle. Rings should drive the layout.
     const linkF = fg.d3Force('link')
-    if (linkF) {
-      linkF.strength(0.01).distance(50)
-    }
+    if (linkF) linkF.strength(0.01).distance(50)
 
     fg.d3Force('charge', null)
 
-    // Strong radial tether. This keeps rings clean.
     fg.d3Force('radial', (alpha: number) => {
       nodes.forEach((node: any) => {
         const nx = node.x ?? 0
@@ -264,7 +282,6 @@ export function GraphCanvas() {
       })
     })
 
-    // Gentle angular tether toward a stable slot.
     fg.d3Force('angularTether', (alpha: number) => {
       nodes.forEach((node: any) => {
         const depth = node.depth ?? 0
@@ -293,7 +310,6 @@ export function GraphCanvas() {
       })
     })
 
-    // Same-ring spread only. Tangential push, not radial shoving.
     fg.d3Force('sameRingSpread', (alpha: number) => {
       const byDepth = new Map<number, any[]>()
       nodes.forEach(n => {
@@ -338,7 +354,6 @@ export function GraphCanvas() {
       })
     })
 
-    // Hard stop for ring bleeding.
     fg.d3Force('crossRingGuard', (alpha: number) => {
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
@@ -375,7 +390,6 @@ export function GraphCanvas() {
     fg.d3ReheatSimulation?.()
   }, [graphData, maxDepth])
 
-  // Seed newly expanded children near their parent, with a narrow arc.
   useEffect(() => {
     const fg = graphRef.current
     if (!fg || !expandedNodeIds.size) return
@@ -391,7 +405,6 @@ export function GraphCanvas() {
       const parentAngle = Math.atan2(parent.y ?? 0, parent.x ?? 0)
       const baseAngle = Number.isFinite(parentAngle) ? parentAngle : -Math.PI / 2
 
-      // Keep expansion tight enough to read as a family, not a firework.
       const totalArc = Math.min(Math.PI * 0.24, 0.12 * children.length)
       const step = children.length > 1 ? totalArc / (children.length - 1) : 0
 
@@ -425,22 +438,24 @@ export function GraphCanvas() {
       const isSelected = selectedNodeId === node.id
       const isExpanded = expandedNodeIds.has(node.id)
       const isHovered = hoveredNodeId === node.id
+      const inHoverLineage = activeLineageIds.has(node.id)
       const isActivated = isSelected || isExpanded
       const color = depthColor(depth)
 
-      // --- UX Enhancement: Dim non-focused nodes ---
+      // --- Apply Hierarchy Dimming ---
       let focusOpacity = 1
-      if (selectedNodeId) {
-        if (isSelected || isHovered) focusOpacity = 1
-        else if (isExpanded) focusOpacity = 0.5   // Keep expanded lineage somewhat visible
-        else focusOpacity = 0.15                  // Heavily dim unrelated nodes
-      } else if (hoveredNodeId) {
-        if (isHovered) focusOpacity = 1
-        else focusOpacity = 0.35                  // Softly dim others on hover
+      if (hoveredNodeId) {
+        // If a node is hovered, highlight its lineage/children and deeply dim the rest
+        focusOpacity = inHoverLineage ? 1 : 0.12
+      } else if (selectedNodeId) {
+        // Fallback to selection dimming if no hover is active
+        if (isSelected) focusOpacity = 1
+        else if (isExpanded) focusOpacity = 0.5
+        else focusOpacity = 0.15
       }
 
       ctx.save()
-      ctx.globalAlpha = focusOpacity // Apply opacity to the entire node and text
+      ctx.globalAlpha = focusOpacity
 
       const baseR = 3.5 + (maxDepth - depth) * 2.2
       const r = isActivated ? baseR * 1.42 : baseR
@@ -476,7 +491,7 @@ export function GraphCanvas() {
       }
 
       const minScale = depth === 0 ? 0 : depth === 1 ? 0.42 : depth === 2 ? 0.95 : 1.55
-      if (globalScale >= minScale || isActivated || isHovered) {
+      if (globalScale >= minScale || isActivated || inHoverLineage) {
         const raw = (node.label || node.data?.label || '').trim()
         if (!raw) {
           ctx.restore()
@@ -488,21 +503,21 @@ export function GraphCanvas() {
         const fontSize = Math.max(9, (depth <= 1 ? 12 : 10) / globalScale)
         const fadeIn = Math.min(1, (globalScale - minScale + 0.35) / 0.35)
         
-        // Removed the complex text alpha logic because globalAlpha handles it cleanly now
-        const textAlpha = isHovered || isActivated ? 1 : fadeIn * (depth === 0 ? 0.95 : 0.72)
+        // Keep text fully visible if it's in the hovered lineage
+        const textAlpha = isActivated || inHoverLineage ? 1 : fadeIn * (depth === 0 ? 0.95 : 0.72)
 
         ctx.save()
-        ctx.font = `${isHovered ? 600 : depth <= 1 ? 500 : 400} ${fontSize}px -apple-system,"Segoe UI",sans-serif`
+        ctx.font = `${inHoverLineage ? 600 : depth <= 1 ? 500 : 400} ${fontSize}px -apple-system,"Segoe UI",sans-serif`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'top'
         ctx.shadowColor = 'rgba(0,0,0,0.95)'
-        ctx.shadowBlur = isHovered ? 10 : 6
+        ctx.shadowBlur = inHoverLineage ? 10 : 6
 
         const [lr, lg, lb] = isSelected
           ? [235, 225, 255]
           : isExpanded
             ? [220, 215, 255]
-            : isHovered
+            : inHoverLineage
               ? [245, 242, 255]
               : depth === 0
                 ? [210, 195, 255]
@@ -514,9 +529,9 @@ export function GraphCanvas() {
         ctx.fillText(label, nx, ny + r + 4)
         ctx.restore()
       }
-      ctx.restore() // Restore the global opacity setting
+      ctx.restore() // Restores globalAlpha
     },
-    [selectedNodeId, expandedNodeIds, hoveredNodeId, maxDepth]
+    [selectedNodeId, expandedNodeIds, hoveredNodeId, activeLineageIds, maxDepth]
   )
 
   const paintPointer = useCallback(
@@ -549,23 +564,24 @@ export function GraphCanvas() {
     const src = typeof link.source === 'object' ? link.source?.id : link.source
     const tgt = typeof link.target === 'object' ? link.target?.id : link.target
 
-    const hasSelection = !!selectedNodeId
-    const isSelectedLink = src === selectedNodeId || tgt === selectedNodeId
-    const isHoveredLink = src === hoveredNodeId || tgt === hoveredNodeId
+    // Hover takes visual priority
+    if (hoveredNodeId) {
+      // Since it's a strict tree hierarchy, if both nodes are in the lineage, 
+      // the link between them is guaranteed to be a lineage path.
+      const isLineageLink = activeLineageIds.has(src) && activeLineageIds.has(tgt)
+      return isLineageLink ? 'rgba(210, 195, 255, 0.95)' : 'rgba(140, 130, 175, 0.05)'
+    }
+
+    // Fall back to selection/expansion highlights
+    if (selectedNodeId) {
+      const isSelectedLink = src === selectedNodeId || tgt === selectedNodeId
+      return isSelectedLink ? 'rgba(210, 195, 255, 0.85)' : 'rgba(140, 130, 175, 0.05)'
+    }
+
     const isExpandedLink = expandedNodeIds.has(src) || expandedNodeIds.has(tgt)
+    return isExpandedLink ? 'rgba(200, 185, 255, 0.4)' : 'rgba(140, 130, 175, 0.16)'
+  }, [expandedNodeIds, selectedNodeId, hoveredNodeId, activeLineageIds])
 
-    // Highlight relationships connected directly to the user's focus
-    if (isSelectedLink) return 'rgba(210, 195, 255, 0.85)'
-    if (isHoveredLink) return 'rgba(210, 195, 255, 0.65)'
-    if (isExpandedLink) return 'rgba(200, 185, 255, 0.4)'
-
-    // Dim the remaining unrelated background noise
-    if (hasSelection) return 'rgba(140, 130, 175, 0.05)'
-    if (hoveredNodeId) return 'rgba(140, 130, 175, 0.08)'
-    return 'rgba(140, 130, 175, 0.16)'
-  }, [expandedNodeIds, selectedNodeId, hoveredNodeId])
-
-  // Links between the same hierarchy feel cleaner if we render them with a mild bend.
   const linkCurvature = useCallback((link: any) => {
     const sDepth = link.source?.depth ?? 0
     const tDepth = link.target?.depth ?? 0
