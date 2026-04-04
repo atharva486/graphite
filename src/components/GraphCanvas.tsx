@@ -114,7 +114,24 @@ export function GraphCanvas() {
       })
     })
 
+    // Assign reading order relative to parent (starts at 1 for each group of children)
+    const assignReadingOrder = (id: string, index: number): void => {
+      const node = cache.get(id)
+      if (node) {
+        node._readingOrder = index
+      }
+      const kids = childrenOf.get(id) ?? []
+      let childIndex = 1
+      for (const kid of kids) {
+        assignReadingOrder(kid, childIndex++)
+      }
+    }
+
     const roots = allNodes.filter(n => !n._parentId)
+    
+    // Do depth-first reading order assignment starting with the roots
+    let rootIndex = 1
+    roots.forEach(r => assignReadingOrder(r.id, rootIndex++))
     
     if (roots.length > 0) {
       roots[0].__isRingDrawer = true
@@ -335,6 +352,7 @@ export function GraphCanvas() {
             ctx.stroke()
           }
         }
+
         ctx.restore()
       }
 
@@ -387,6 +405,17 @@ export function GraphCanvas() {
         }
       }
 
+      // Draw reading order number inside node
+      if (node._readingOrder != null) {
+        ctx.save()
+        ctx.font = `600 ${Math.max(7, 8 / globalScale)}px monospace`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = 'rgba(0,0,0,0.6)'
+        ctx.fillText(String(node._readingOrder), nx, ny - r * 0.3)
+        ctx.restore()
+      }
+
       const minScale = depth === 0 ? 0 : depth === 1 ? 0.3 : depth === 2 ? 0.7 : 1.2
       if (globalScale >= minScale || isActivated || inHoverLineage) {
         const raw = (node.label || node.data?.label || '').trim()
@@ -395,12 +424,17 @@ export function GraphCanvas() {
           return
         }
 
-        const maxChars = depth <= 1 ? 34 : 26
-        const label = raw.length > maxChars ? raw.slice(0, maxChars - 1) + '…' : raw
+        // NEW LOGIC: Maximum 16 characters unless highlighted/hovered
+        const isTextHighlighted = inHoverLineage || isActivated
+        const maxChars = 16
+        const label = (!isTextHighlighted && raw.length > maxChars)
+          ? raw.slice(0, maxChars - 1) + '…'
+          : raw
+
         const fontSize = Math.max(9, (depth <= 1 ? 12 : 10) / globalScale)
         const fadeIn = Math.min(1, (globalScale - minScale + 0.35) / 0.35)
         
-        const textAlpha = isActivated || inHoverLineage ? 1 : fadeIn * (depth === 0 ? 0.95 : 0.72)
+        const textAlpha = isTextHighlighted ? 1 : fadeIn * (depth === 0 ? 0.95 : 0.72)
 
         ctx.save()
         ctx.font = `${inHoverLineage ? 600 : depth <= 1 ? 500 : 400} ${fontSize}px -apple-system,"Segoe UI",sans-serif`
@@ -427,7 +461,7 @@ export function GraphCanvas() {
       }
       ctx.restore() 
     },
-    [selectedNodeId, expandedNodeIds, hoveredNodeId, activeLineageIds, maxDepth]
+    [selectedNodeId, expandedNodeIds, hoveredNodeId, activeLineageIds, maxDepth, graphData]
   )
 
   const paintPointer = useCallback(
@@ -451,7 +485,7 @@ export function GraphCanvas() {
       else next.add(n.id)
       return next
     })
-    selectNode(n.id)
+    selectNode(null)
   }, [selectNode])
 
   const handleBackgroundClick = useCallback(() => selectNode(null), [selectNode])
