@@ -50,85 +50,6 @@ export function GraphCanvas() {
     [fgNodes]
   )
 
-useEffect(() => {
-    // 1. Guard clause: Only run if an ID exists
-    if (!selectedNodeId) return; 
-
-    // 2. Read the current state DIRECTLY to avoid dependency loop traps
-    const storeState = useDocStore.getState();
-    const currentNodes = storeState.flowNodes;
-    
-    // ⚠️ IMPORTANT: Change 'activeFilePath' to whatever you actually named it in your Zustand store!
-    const dynamicJsonPath = storeState.jsonPath; 
-
-    const selectedNode = currentNodes.find((n: any) => n.id === selectedNodeId);
-    console.log("HELOOO");
-    if (!selectedNode) return;
-    if (!dynamicJsonPath) {
-      console.error("🛑 No file path found in store! Make sure you save it when opening a file.");
-      return;
-    }
-
-    console.log(`🖱️ Requesting AI Cards for: ${selectedNode.label} (${selectedNode.id})`);
-
-    // 3. Build the fully dynamic payload
-    const payload = {
-      node_id: selectedNode.id,
-      json_path: dynamicJsonPath, // 👈 Fully dynamic now. No hardcoding.
-      visited_ids: []
-    };
-
-    // 4. Call the bridge
-    window.electronAPI.getAiCards(payload)
-      .then((data: any) => {
-        if (!data || data.error) {
-          console.error("🛑 AI Engine Error:", data?.error);
-          return; 
-        }
-
-        console.log("🧠 GEMINI CARDS ARRIVED!", data);
-
-        const newNodes: any[] = [];
-        const newEdges: any[] = [];
-
-        Object.keys(data).forEach((key) => {
-          if (key.startsWith('card_')) {
-            const card = data[key];
-            const aiNodeId = `ai_${selectedNodeId}_${key}`; 
-
-            newNodes.push({
-              id: aiNodeId,
-              label: card.concept || card.style?.replace('_', ' ').toUpperCase() || "AI Suggestion", 
-              depth: (selectedNode.depth || 0) + 1,
-              nodeType: 'ai_suggestion', 
-              page: 'AI', 
-              data: { label: card.suggestion },
-              isSelected: false,
-              // Spawn them in a wider circle so they don't overlap as much
-              x: (selectedNode.x || 0) + (Math.random() - 0.5) * 120,
-              y: (selectedNode.y || 0) + (Math.random() - 0.5) * 120,
-            });
-
-            newEdges.push({
-              id: `link_${selectedNodeId}_${aiNodeId}`,
-              source: selectedNodeId,
-              target: aiNodeId,
-              color: '#fbbf24', 
-            });
-          }
-        });
-
-        // 5. Batch update the global store safely
-        useDocStore.setState((state: any) => ({
-          flowNodes: [...state.flowNodes, ...newNodes],
-          flowEdges: [...state.flowEdges, ...newEdges]
-        }));
-      })
-      .catch((error: any) => console.error("❌ IPC Error:", error));
-
-  }, [selectedNodeId]); // 👈 ONLY RUNS WHEN YOU SELECT A NEW NODE. NO INFINITE LOOPS.
-  
-  
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -183,6 +104,11 @@ useEffect(() => {
         if (!childrenOf.has(n._parentId)) childrenOf.set(n._parentId, [])
         childrenOf.get(n._parentId)!.push(n.id)
       }
+    })
+
+    // Mark nodes that have children
+    allNodes.forEach(n => {
+      n.hasChildren = (childrenOf.get(n.id) || []).length > 0
     })
 
     // Assign reading order relative to parent (starts at 1 for each group of children)
@@ -429,7 +355,7 @@ useEffect(() => {
 
       const depth = node.depth ?? 0
       const isSelected = selectedNodeId === node.id
-      const isExpanded = expandedNodeIds.has(node.id)
+      const isExpanded = expandedNodeIds.has(node.id) && node.hasChildren
       const isHovered = hoveredNodeId === node.id
       const inHoverLineage = activeLineageIds.has(node.id)
       const isActivated = isSelected || isExpanded
@@ -550,12 +476,14 @@ useEffect(() => {
   )
 
   const handleNodeClick = useCallback((n: any) => {
-    setExpandedNodeIds(prev => {
-      const next = new Set(prev)
-      if (next.has(n.id)) next.delete(n.id)
-      else next.add(n.id)
-      return next
-    })
+    if (n.hasChildren) {
+      setExpandedNodeIds(prev => {
+        const next = new Set(prev)
+        if (next.has(n.id)) next.delete(n.id)
+        else next.add(n.id)
+        return next
+      })
+    }
     selectNode(n.id)
   }, [selectNode])
 
