@@ -13,6 +13,10 @@ dist
 dist-ssr
 *.local
 
+s1.json
+test_book_structure.json
+test_book.pdf
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
