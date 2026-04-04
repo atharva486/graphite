@@ -10,14 +10,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.APP_ROOT = path.join(__dirname, '..')
 
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const MAIN_DIST  = path.join(process.env.APP_ROOT, 'dist-electron')
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST
 
-const SERVER_URL = 'https://korean-sell-everywhere-organizing.trycloudflare.com/stream-scan'
+const SERVER_URL = 'https://incurred-supply-entering-strange.trycloudflare.com/stream-scan'
 
 let win: BrowserWindow | null
 
@@ -95,8 +95,8 @@ function createWindow() {
 
   win.maximize()
 
-  // ── Uncomment to debug blank screen ──
-  // win.webContents.openDevTools()
+  // ── Open DevTools to capture errors ──
+  win.webContents.openDevTools()
 
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
@@ -126,7 +126,7 @@ ipcMain.handle('dialog:openFile', async (_event, filters?: { name: string; exten
     filters: filters ?? [
       { name: 'Supported Files', extensions: ['json', 'pdf'] },
       { name: 'JSON', extensions: ['json'] },
-      { name: 'PDF',  extensions: ['pdf'] },
+      { name: 'PDF', extensions: ['pdf'] },
     ],
   })
   return result.canceled || !result.filePaths.length ? null : result.filePaths[0]
@@ -153,6 +153,8 @@ ipcMain.handle('json:loadFile', async (_event, filePath: string) => {
   }
 })
 
+
+
 // ─── IPC: Show file in OS file manager ───────────────────────────────────────
 // ← THIS WAS MISSING — caused unhandled IPC rejection → blank screen
 
@@ -165,7 +167,7 @@ ipcMain.handle('shell:showItemInFolder', (_event, filePath: string) => {
 ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: string) => {
   try {
     const fileBuffer = fs.readFileSync(pdfPath)
-    const fileName   = path.basename(pdfPath)
+    const fileName = path.basename(pdfPath)
     const outputPath = resolveOutputPath(pdfPath, outputDir)
 
     fs.mkdirSync(path.dirname(outputPath), { recursive: true })
@@ -193,9 +195,9 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
 
     let tree: DocNode[] | null = null
     let totalEnriched = 0
-    const reader  = response.body.getReader()
+    const reader = response.body.getReader()
     const decoder = new TextDecoder()
-    let buffer    = ''
+    let buffer = ''
 
     while (true) {
       const { done, value } = await reader.read()
@@ -216,7 +218,7 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
 
         if (data.status === 'init') {
           tree = data.tree as DocNode[]
-          const allPages   = [...new Set(collectAllPages(tree))].sort((a, b) => a - b)
+          const allPages = [...new Set(collectAllPages(tree))].sort((a, b) => a - b)
           const totalPages = allPages.length > 0 ? Math.max(...allPages) : 0
           attachPageRanges(tree, allPages, totalPages)
 
@@ -224,7 +226,7 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
           const [start, end] = data.range as [number, number]
           const leaf = findLeafByRange(tree, start, end)
           if (leaf) {
-            leaf.children  = data.sub_headings as DocNode[]
+            leaf.children = data.sub_headings as DocNode[]
             totalEnriched += leaf.children.length
           }
 
@@ -233,9 +235,9 @@ ipcMain.handle('pdf:stream-scan', async (event, pdfPath: string, outputDir?: str
           const sizeKb = (fs.statSync(outputPath).size / 1024).toFixed(1)
           event.sender.send('stream:chunk', JSON.stringify({
             status: 'saved',
-            path:   outputPath,
-            size:   `${sizeKb} KB`,
-            total:  totalEnriched,
+            path: outputPath,
+            size: `${sizeKb} KB`,
+            total: totalEnriched,
           }))
         }
       }

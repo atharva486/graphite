@@ -25,25 +25,41 @@ export function Toolbar() {
   const [savedPath,  setSavedPath]    = useState<string | null>(null)
 
   // ── Open File (JSON or PDF) ────────────────────────────────────────────────
-  const handleOpenFile = useCallback(async () => {
+const handleOpenFile = useCallback(async () => {
     const filePath = await window.electronAPI.openFile()
     if (!filePath) return
 
-    if (filePath.endsWith('.json')) {
+    if (filePath.endsWith('.json')){
+      console.log("⚛️ [FRONTEND DEBUG] 1. Sent path to Main. Waiting for response...") 
       setStatus('loading', 'Reading JSON…')
+      
       const result = await window.electronAPI.loadJsonFile(filePath)
+      console.log("⚛️ [FRONTEND DEBUG] 2. Received response from Main:", result) 
+      
       if (result.ok && result.data) {
+        console.log("⚛️ [FRONTEND DEBUG] 3. Data is good! Pushing to useDocStore.loadFromJson...") 
         loadFromJson(result.data, filePath)
       } else {
+        console.error("⚛️ [FRONTEND DEBUG ERROR] Result was not OK:", result.error) 
         setStatus('error', `Failed: ${result.error}`)
       }
-    } else if (filePath.endsWith('.pdf')) {
+    } 
+    // 👇 --- ADD THIS BLOCK FOR PDF --- 👇
+    else if (filePath.endsWith('.pdf')) {
+      console.log(`⚛️ [FRONTEND DEBUG] PDF selected: ${filePath}`)
+      
       setPdfPath(filePath)
-      setSavedPath(null)
-      setStatus('ready', `PDF ready: ${filePath.split('/').pop()}`)
+      
+      // If you are tracking the saved path in your component, reset it here:
+      // setSavedPath(null) 
+      
+      // Extract just the file name from the path to show in the UI
+      const fileName = filePath.split(/[\\/]/).pop() 
+      setStatus('ready', `PDF ready: ${fileName}`)
     }
-  }, [loadFromJson, setPdfPath, setStatus])
+    // 👆 ------------------------------ 👆
 
+  }, [loadFromJson, setPdfPath, setStatus]) // <-- Note: if you uncomment setSavedPath, add it to this array!
   // ── Pick output folder ────────────────────────────────────────────────────
   const handlePickOutputDir = useCallback(async () => {
     const dir = await window.electronAPI.openFolder()
@@ -67,7 +83,7 @@ export function Toolbar() {
     setStatus('loading', 'Loading s1.json…')
     try {
       const res = await fetch('/s1.json')
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) {throw new Error(`HTTP ${res.status}`)}
       const data = await res.json()
       loadFromJson(data, 's1.json')
     } catch (e) {
