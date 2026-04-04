@@ -185,14 +185,6 @@ useEffect(() => {
       }
     })
 
-    childrenOf.forEach(kids => {
-      kids.sort((a, b) => {
-        const na = cache.get(a)
-        const nb = cache.get(b)
-        return String(na?.label ?? a).localeCompare(String(nb?.label ?? b))
-      })
-    })
-
     // Assign reading order relative to parent (starts at 1 for each group of children)
     const assignReadingOrder = (id: string, index: number): void => {
       const node = cache.get(id)
@@ -484,14 +476,14 @@ useEffect(() => {
         }
       }
 
-      // Draw reading order number inside node
+      // Draw reading order number perfectly inside the centre of the node
       if (node._readingOrder != null) {
         ctx.save()
         ctx.font = `600 ${Math.max(7, 8 / globalScale)}px monospace`
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = 'rgba(0,0,0,0.6)'
-        ctx.fillText(String(node._readingOrder), nx, ny - r * 0.3)
+        ctx.fillText(String(node._readingOrder), nx, ny)
         ctx.restore()
       }
 
@@ -503,7 +495,7 @@ useEffect(() => {
           return
         }
 
-        // NEW LOGIC: Maximum 16 characters unless highlighted/hovered
+        // Maximum 16 characters unless highlighted/hovered
         const isTextHighlighted = inHoverLineage || isActivated
         const maxChars = 16
         const label = (!isTextHighlighted && raw.length > maxChars)
