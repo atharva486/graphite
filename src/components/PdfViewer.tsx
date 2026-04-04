@@ -30,7 +30,7 @@ export function PdfViewer() {
   }, [page, jumpToPage])
 
   // --- TTS State ---
-  const [elevenLabsKey, setElevenLabsKey] = useState('sk_4f1ad594182d9cf55383e8b458c23b81e54495a05f9a4517')
+  const [elevenLabsKey] = useState('sk_4f1ad594182d9cf55383e8b458c23b81e54495a05f9a4517')
   const [isPlaying, setIsPlaying] = useState(false)
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
   const [isReading, setIsReading] = useState(false)
