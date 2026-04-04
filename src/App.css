@@ -91,6 +91,7 @@ html, body, #root {
 
 .toolbar-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
   -webkit-app-region: no-drag;
 }
@@ -103,6 +104,7 @@ html, body, #root {
   font-size: 12px;
   color: var(--text-secondary);
   -webkit-app-region: no-drag;
+  min-width: 0;
 }
 
 .status-dot {
@@ -112,16 +114,23 @@ html, body, #root {
   animation: pulse 2s infinite;
 }
 
+.status-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .status--idle    .status-dot { background: var(--text-muted); animation: none; }
 .status--ready   .status-dot { background: var(--accent-green); }
-.status--loading .status-dot, .status--processing .status-dot { background: var(--accent-amber); }
+.status--loading .status-dot,
+.status--processing .status-dot { background: var(--accent-amber); }
 .status--error   .status-dot { background: var(--accent-red); animation: none; }
 .status--ready   .status-text { color: var(--accent-green); }
 .status--error   .status-text { color: var(--accent-red); }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  50%       { opacity: 0.4; }
 }
 
 /* ─── Buttons ───────────────────────────────────────────────────────────────── */
@@ -137,6 +146,8 @@ html, body, #root {
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
   -webkit-app-region: no-drag;
 }
 
@@ -145,6 +156,7 @@ html, body, #root {
   cursor: not-allowed;
 }
 
+/* Primary — purple fill */
 .btn-primary {
   background: var(--accent-purple);
   color: #fff;
@@ -152,9 +164,10 @@ html, body, #root {
 }
 .btn-primary:hover:not(:disabled) {
   background: #6d28d9;
-  box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 0 12px rgba(124,58,237,0.4);
 }
 
+/* Secondary — raised surface */
 .btn-secondary {
   background: var(--bg-raised);
   color: var(--text-primary);
@@ -166,6 +179,7 @@ html, body, #root {
   color: var(--accent-cyan);
 }
 
+/* Ghost — transparent */
 .btn-ghost {
   background: transparent;
   color: var(--text-secondary);
@@ -177,13 +191,130 @@ html, body, #root {
   color: var(--accent-purple);
 }
 
+/* Folder set — highlighted purple outline when a save folder is chosen */
+.btn-folder-set {
+  background: rgba(124,58,237,0.1);
+  color: var(--accent-purple);
+  border-color: rgba(124,58,237,0.45);
+}
+.btn-folder-set:hover:not(:disabled) {
+  background: rgba(124,58,237,0.18);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 10px rgba(124,58,237,0.25);
+}
+
+/* Icon-only button (the × clear button next to folder) */
+.btn-icon {
+  padding: 6px 8px;
+  min-width: unset;
+}
+
+/* Stream CTA — cyan→purple gradient */
+.btn-stream {
+  background: linear-gradient(135deg, #0891b2, #7c3aed);
+  color: #fff;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn-stream > * { position: relative; z-index: 1; }
+.btn-stream::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #7c3aed, #0891b2);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-stream:hover:not(:disabled)::after  { opacity: 1; }
+.btn-stream:hover:not(:disabled)         { box-shadow: 0 0 16px rgba(6,182,212,0.4); }
+.btn-stream:disabled                     { opacity: 0.5; }
+
+/* ─── Button group (folder picker + clear × side-by-side) ──────────────────── */
+.btn-group {
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+.btn-group .btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group .btn + .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+/* ─── Scan progress ticker ──────────────────────────────────────────────────── */
+.scan-progress {
+  font-size: 11px;
+  color: var(--accent-cyan);
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(6,182,212,0.08);
+  border: 1px solid rgba(6,182,212,0.22);
+  border-radius: 4px;
+  padding: 2px 7px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+}
+
+/* ─── Saved path pill ───────────────────────────────────────────────────────── */
+.saved-path {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-bright);
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  transition: all 0.15s ease;
+}
+.saved-path:hover {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+  background: rgba(16,185,129,0.08);
+}
+.saved-path svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ─── Spinner ───────────────────────────────────────────────────────────────── */
 .btn-spinner {
   width: 14px; height: 14px;
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
+
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(124,58,237,0.2);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ─── Sidebar ───────────────────────────────────────────────────────────────── */
@@ -268,16 +399,16 @@ html, body, #root {
   padding: 6px 0;
 }
 
-.sidebar-scroll::-webkit-scrollbar { width: 4px; }
-.sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-.sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+.sidebar-scroll::-webkit-scrollbar        { width: 4px; }
+.sidebar-scroll::-webkit-scrollbar-track  { background: transparent; }
+.sidebar-scroll::-webkit-scrollbar-thumb  { background: var(--border-bright); border-radius: 4px; }
 
 .sidebar-item {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 6px 12px 6px 12px;
+  padding: 6px 12px;
   background: none;
   border: none;
   color: var(--text-secondary);
@@ -295,7 +426,7 @@ html, body, #root {
 }
 
 .sidebar-item--selected {
-  background: rgba(124, 58, 237, 0.1);
+  background: rgba(124,58,237,0.1);
   border-left-color: var(--accent-purple);
   color: var(--text-primary);
 }
@@ -344,7 +475,7 @@ html, body, #root {
   max-width: 360px;
 }
 
-.graph-empty-content svg { opacity: 0.4; }
+.graph-empty-content svg  { opacity: 0.4; }
 
 .graph-empty-content h2 {
   font-size: 22px;
@@ -405,14 +536,14 @@ html, body, #root {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Override React Flow base styles */
+/* React Flow overrides */
 .react-flow__node { cursor: pointer; }
 .react-flow__edge-path { stroke-linecap: round; }
 .react-flow__controls button {
-  background: var(--bg-raised) !important;
-  border-color: var(--border) !important;
-  color: var(--text-primary) !important;
-  fill: var(--text-primary) !important;
+  background:   var(--bg-raised)    !important;
+  border-color: var(--border)       !important;
+  color:        var(--text-primary) !important;
+  fill:         var(--text-primary) !important;
 }
 .react-flow__controls button:hover {
   background: var(--bg-overlay) !important;
@@ -446,9 +577,9 @@ html, body, #root {
   font-size: 10px;
   padding: 2px 8px;
   border-radius: 20px;
-  background: rgba(124, 58, 237, 0.15);
+  background: rgba(124,58,237,0.15);
   color: var(--accent-purple);
-  border: 1px solid rgba(124, 58, 237, 0.3);
+  border: 1px solid rgba(124,58,237,0.3);
   text-transform: none;
   letter-spacing: 0;
   font-weight: 400;
@@ -482,13 +613,4 @@ html, body, #root {
   width: 100%;
   border: none;
   background: #fff;
-}
-
-/* ─── Loading Spinner ───────────────────────────────────────────────────────── */
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid rgba(124,58,237,0.2);
-  border-top-color: var(--accent-purple);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
 }
