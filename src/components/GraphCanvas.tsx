@@ -50,9 +50,7 @@ export function GraphCanvas() {
     [fgNodes]
   )
 
-  // ─── AI Integration Effect ────────────────────────────────────────────────
-// ─── AI Integration Effect ────────────────────────────────────────────────
-  useEffect(() => {
+useEffect(() => {
     // 1. Guard clause: Only run if an ID exists
     if (!selectedNodeId) return; 
 
@@ -64,7 +62,7 @@ export function GraphCanvas() {
     const dynamicJsonPath = storeState.jsonPath; 
 
     const selectedNode = currentNodes.find((n: any) => n.id === selectedNodeId);
-    
+    console.log("HELOOO");
     if (!selectedNode) return;
     if (!dynamicJsonPath) {
       console.error("🛑 No file path found in store! Make sure you save it when opening a file.");
@@ -129,7 +127,6 @@ export function GraphCanvas() {
       .catch((error: any) => console.error("❌ IPC Error:", error));
 
   }, [selectedNodeId]); // 👈 ONLY RUNS WHEN YOU SELECT A NEW NODE. NO INFINITE LOOPS.
-  
   
   
   useEffect(() => {
@@ -567,7 +564,7 @@ export function GraphCanvas() {
       else next.add(n.id)
       return next
     })
-    selectNode(null)
+    selectNode(n.id)
   }, [selectNode])
 
   const handleBackgroundClick = useCallback(() => selectNode(null), [selectNode])
