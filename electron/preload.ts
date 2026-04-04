@@ -12,6 +12,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadJsonFile: (filePath: string): Promise<{ ok: boolean; data?: unknown; path?: string; error?: string }> =>
     ipcRenderer.invoke('json:loadFile', filePath),
 
+  /** Save data to a local JSON file. */
+  saveJsonFile: (filePath: string, data: any): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('json:saveFile', filePath, data),
+
   /** Legacy: POST to Python FastAPI /process-pdf. */
   processPdf: (pdfPath: string): Promise<{ ok: boolean; data?: unknown; error?: string }> =>
     ipcRenderer.invoke('pdf:process', pdfPath),

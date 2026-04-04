@@ -1,10 +1,8 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'  // ← shell added
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs'
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 process.env.APP_ROOT = path.join(__dirname, '..')
@@ -210,6 +208,17 @@ ipcMain.handle('json:loadFile', async (_event, filePath: string) => {
   try {
     const raw = fs.readFileSync(filePath, 'utf-8')
     return { ok: true, data: JSON.parse(raw), path: filePath }
+  } catch (e) {
+    return { ok: false, error: (e as Error).message }
+  }
+})
+
+// ─── IPC: Save JSON ───────────────────────────────────────────────────────────
+
+ipcMain.handle('json:saveFile', async (_event, filePath: string, data: any) => {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8')
+    return { ok: true }
   } catch (e) {
     return { ok: false, error: (e as Error).message }
   }

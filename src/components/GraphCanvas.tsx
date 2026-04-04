@@ -42,6 +42,10 @@ function getRadius(depth: number) {
 export function GraphCanvas() {
   const fgNodes        = useDocStore(s => s.flowNodes)
   const fgEdges        = useDocStore(s => s.flowEdges)
+  const manualNodes    = useDocStore(s => s.manualNodes)
+  const addManualNode  = useDocStore(s => s.addManualNode)
+  const updateManualNode = useDocStore(s => s.updateManualNode)
+  const deleteManualNode = useDocStore(s => s.deleteManualNode)
   const selectNode     = useDocStore(s => s.selectNode)
   const status         = useDocStore(s => s.status)
   const selectedNodeId = useDocStore(s => s.selectedNodeId)
@@ -268,13 +272,42 @@ export function GraphCanvas() {
       }
     }
 
-    const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id))
+    // Convert manual nodes to FGNode format
+    manualNodes.forEach(mn => {
+      const node = cache.get(mn.id)
+      if (!node) {
+        const newNode = {
+          id: mn.id,
+          label: mn.label,
+          nodeType: 'manual' as any,
+          depth: 0,
+          page: 0,
+          page_range: [0, 0] as [number, number],
+          docNode: {} as any, // placeholder
+          isSelected: false,
+          __hasBeenDragged: false,
+        }
+        cache.set(mn.id, newNode)
+      } else {
+        // Update existing
+        node.label = mn.label
+      }
+    })
+
+    const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id) || manualNodes.some(mn => mn.id === n.id))
 
     const parentOf = new Map<string, string>()
     fgEdges.forEach(e => {
       const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
       const t = typeof e.target === 'object' ? (e.target as any).id : String(e.target)
       parentOf.set(t, s)
+    })
+
+    // Add manual node edges
+    manualNodes.forEach(mn => {
+      mn.parents.forEach(parentId => {
+        parentOf.set(mn.id, parentId)
+      })
     })
 
     const childrenOf = new Map<string, string[]>()
@@ -286,12 +319,9 @@ export function GraphCanvas() {
       }
     })
 
-    childrenOf.forEach(kids => {
-      kids.sort((a, b) => {
-        const na = cache.get(a)
-        const nb = cache.get(b)
-        return String(na?.label ?? a).localeCompare(String(nb?.label ?? b))
-      })
+    // Mark nodes that have children
+    allNodes.forEach(n => {
+      n.hasChildren = (childrenOf.get(n.id) || []).length > 0
     })
 
     const assignReadingOrder = (id: string, index: number): void => {
@@ -389,7 +419,16 @@ export function GraphCanvas() {
     if (selectedNodeId) addAncestors(selectedNodeId)
 
     const filteredNodes = allNodes.filter(n => visibleIds.has(n.id))
-    const filteredLinks = fgEdges
+    
+    // Create edges for manual nodes
+    const manualEdges = manualNodes.flatMap(mn => 
+      mn.parents.map(parentId => ({
+        source: parentId,
+        target: mn.id,
+      }))
+    )
+    
+    const filteredLinks = [...fgEdges, ...manualEdges]
       .filter(e => {
         const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
         const t = typeof e.target === 'object' ? (e.target as any).id : String(e.target)
@@ -398,7 +437,7 @@ export function GraphCanvas() {
       .map(e => ({ ...e }))
 
     return { nodes: filteredNodes, links: filteredLinks }
-  }, [fgNodes, fgEdges, selectedNodeId, expandedNodeIds])
+  }, [fgNodes, fgEdges, manualNodes, selectedNodeId, expandedNodeIds])
 
   const activeLineageIds = useMemo(() => {
     const ids = new Set<string>()
@@ -413,10 +452,6 @@ export function GraphCanvas() {
       const node = nodeMap.get(currentId)
       currentId = node?._parentId ?? null
     }
-
-    nodes.forEach(n => {
-      if (n._parentId === hoveredNodeId) ids.add(n.id)
-    })
 
     return ids
   }, [hoveredNodeId, graphData.nodes])
@@ -433,6 +468,9 @@ export function GraphCanvas() {
 
     fg.d3Force('radialLock', (alpha: number) => {
       nodes.forEach((node: any) => {
+        const isManual = node.nodeType === 'manual'
+        if (isManual) return // Manual nodes are free-floating
+        
         const nx = node.x ?? 0
         const ny = node.y ?? 0
         const depth = node.depth ?? 0
@@ -470,11 +508,46 @@ export function GraphCanvas() {
       }
     })
 
+    fg.d3Force('manualNodeAttraction', (alpha: number) => {
+      nodes.forEach((node: any) => {
+        const isManual = node.nodeType === 'manual'
+        if (!isManual) return
+
+        // Find parent nodes
+        const parentIds = manualNodes.find(mn => mn.id === node.id)?.parents || []
+        if (parentIds.length === 0) return
+
+        parentIds.forEach(parentId => {
+          const parentNode = nodes.find(n => n.id === parentId)
+          if (!parentNode) return
+
+          const dx = (parentNode.x ?? 0) - (node.x ?? 0)
+          const dy = (parentNode.y ?? 0) - (node.y ?? 0)
+          const d2 = dx * dx + dy * dy || 1
+          const d = Math.sqrt(d2)
+          
+          // Attractive force towards parent
+          const attractionStrength = 0.5 * alpha / d2
+          const fx = (dx / d) * attractionStrength
+          const fy = (dy / d) * attractionStrength
+          
+          node.vx += fx
+          node.vy += fy
+        })
+      })
+    })
+
     fg.d3ReheatSimulation?.()
   }, [graphData])
 
   const handleNodeDrag = useCallback((node: any) => {
     node.__hasBeenDragged = true
+    const isManual = node.nodeType === 'manual'
+    if (isManual) {
+      // Manual nodes can be dragged freely
+      return
+    }
+    
     const r = node._dragRadius ?? 0
     if (r === 0) {
       node.x = 0
@@ -492,6 +565,13 @@ export function GraphCanvas() {
 
   const handleNodeDragEnd = useCallback((node: any) => {
     node.__hasBeenDragged = true
+    const isManual = node.nodeType === 'manual'
+    if (isManual) {
+      // Save the position for manual nodes
+      updateManualNode(node.id, { x: node.x, y: node.y })
+      return
+    }
+    
     const r = node._dragRadius ?? 0
     if (r === 0) {
       node.x = 0
@@ -505,7 +585,7 @@ export function GraphCanvas() {
     node.y = r * Math.sin(angle)
     node.fx = node.x
     node.fy = node.y
-  }, [])
+  }, [updateManualNode])
 
   const paintNode = useCallback(
     (node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
@@ -530,11 +610,13 @@ export function GraphCanvas() {
 
       const depth = node.depth ?? 0
       const isSelected = selectedNodeId === node.id
-      const isExpanded = expandedNodeIds.has(node.id)
+      const isExpanded = expandedNodeIds.has(node.id) && node.hasChildren
       const isHovered = hoveredNodeId === node.id
       const inHoverLineage = activeLineageIds.has(node.id)
       const isActivated = isSelected || isExpanded
-      const color = depthColor(depth)
+      const isManual = node.nodeType === 'manual'
+      const isConnecting = connectingFrom === node.id
+      const color = isManual ? '#ff6b6b' : depthColor(depth)
 
       let focusOpacity = 1
       if (hoveredNodeId) {
@@ -545,11 +627,11 @@ export function GraphCanvas() {
       ctx.globalAlpha = focusOpacity
 
       const baseR = 3.5 + (maxDepth - depth) * 2.2
-      const r = isActivated ? baseR * 1.42 : baseR
+      const r = isActivated ? baseR * 1.42 : isConnecting ? baseR * 1.8 : baseR
 
-      const haloR = r * (isSelected ? 3.2 : isExpanded ? 2.7 : isHovered ? 2.2 : 1.8)
+      const haloR = r * (isSelected ? 3.2 : isExpanded ? 2.7 : isHovered ? 2.2 : isConnecting ? 2.5 : 1.8)
       const grad = ctx.createRadialGradient(nx, ny, r * 0.25, nx, ny, haloR)
-      const haloA = isSelected ? '66' : isExpanded ? '48' : isHovered ? '2d' : '18'
+      const haloA = isSelected ? '66' : isExpanded ? '48' : isHovered ? '2d' : isConnecting ? '4d' : '18'
       grad.addColorStop(0, color + haloA)
       grad.addColorStop(1, color + '00')
 
@@ -583,7 +665,7 @@ export function GraphCanvas() {
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillStyle = 'rgba(0,0,0,0.6)'
-        ctx.fillText(String(node._readingOrder), nx, ny - r * 0.3)
+        ctx.fillText(String(node._readingOrder), nx, ny)
         ctx.restore()
       }
 
@@ -789,7 +871,11 @@ export function GraphCanvas() {
           onNodeHover={(node: any) => {
             setHoveredNodeId(node?.id ?? null)
             if (containerRef.current) {
-              containerRef.current.style.cursor = node ? 'pointer' : 'default'
+              if (connectingFrom) {
+                containerRef.current.style.cursor = 'crosshair'
+              } else {
+                containerRef.current.style.cursor = node ? 'pointer' : 'default'
+              }
             }
           }}
           nodeCanvasObject={paintNode}

@@ -29,6 +29,11 @@ interface Window {
       filePath: string
     ) => Promise<{ ok: boolean; data?: unknown; path?: string; error?: string }>
 
+    saveJsonFile: (
+      filePath: string,
+      data: any
+    ) => Promise<{ ok: boolean; error?: string }>
+
     processPdf: (
       pdfPath: string
     ) => Promise<{ ok: boolean; data?: unknown; error?: string }>
