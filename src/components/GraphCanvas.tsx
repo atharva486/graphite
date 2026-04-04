@@ -3,23 +3,6 @@ import ForceGraph2D from 'react-force-graph-2d'
 import { useDocStore } from '../store/useDocStore'
 
 const TAU = Math.PI * 2
-const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
-
-function hashToUnit(seed: string) {
-  let h = 2166136261
-  for (let i = 0; i < seed.length; i++) {
-    h ^= seed.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return ((h >>> 0) % 10000) / 10000
-}
-
-function shortestAngleDiff(a: number, b: number) {
-  let d = b - a
-  while (d > Math.PI) d -= TAU
-  while (d < -Math.PI) d += TAU
-  return d
-}
 
 // ─── Depth colour palette ────────────────────────────────────────────────────
 const DEPTH_COLORS = [
@@ -39,19 +22,12 @@ function depthColor(depth: number) {
 // ─── Orbit radii ─────────────────────────────────────────────────────────────
 const RING_RADII = [
   0,
-  140,
-  310,
-  520,
-  770,
-  1060,
+  220,
+  480,
+  780,
+  1120,
+  1500,
 ]
-
-// Same-ring sibling spacing, measured as arc length in pixels.
-// Smaller value = children stay closer together.
-const SIBLING_ARC_GAP = 72
-
-// Hard exclusion zone between nodes on different rings.
-const CROSS_RING_GUARD = 34
 
 export function GraphCanvas() {
   const fgNodes        = useDocStore(s => s.flowNodes)
@@ -67,9 +43,7 @@ export function GraphCanvas() {
   const graphRef     = useRef<any>(null)
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 })
 
-  // Keep node objects stable so ForceGraph retains x/y/vx/vy across rerenders.
   const nodeCacheRef = useRef<Map<string, any>>(new Map())
-  const angleMemoryRef = useRef<Map<string, number>>(new Map())
 
   const maxDepth = useMemo(
     () => Math.max(...fgNodes.map(n => n.depth ?? 0), 1),
@@ -97,18 +71,25 @@ export function GraphCanvas() {
     const cache = nodeCacheRef.current
 
     for (const src of fgNodes) {
-      const existing = cache.get(src.id)
-      const node = existing ?? { ...src }
-      Object.assign(node, src)
-      cache.set(src.id, node)
-
-      if (!angleMemoryRef.current.has(src.id)) {
-        angleMemoryRef.current.set(src.id, hashToUnit(src.id) * TAU)
+      let node = cache.get(src.id)
+      if (!node) {
+        node = { ...src, __hasBeenDragged: false }
+        cache.set(src.id, node)
+      } else {
+        // Preserve drag state across component updates (e.g., expanding nodes)
+        const savedFx = node.fx
+        const savedFy = node.fy
+        const savedDragged = node.__hasBeenDragged
+        Object.assign(node, src)
+        node.fx = savedFx
+        node.fy = savedFy
+        node.__hasBeenDragged = savedDragged
       }
     }
 
     const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id))
 
+    // Build hierarchy
     const parentOf = new Map<string, string>()
     fgEdges.forEach(e => {
       const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
@@ -116,74 +97,80 @@ export function GraphCanvas() {
       parentOf.set(t, s)
     })
 
-    allNodes.forEach(n => {
-      n._parentId = parentOf.get(n.id) ?? null
-    })
-
     const childrenOf = new Map<string, string[]>()
     allNodes.forEach(n => {
+      n._parentId = parentOf.get(n.id) ?? null
       if (n._parentId) {
         if (!childrenOf.has(n._parentId)) childrenOf.set(n._parentId, [])
         childrenOf.get(n._parentId)!.push(n.id)
       }
     })
 
-    const targetAngle = new Map<string, number>()
-
-    const getAngle = (id: string) => {
-      const n = cache.get(id)
-      if (!n) return angleMemoryRef.current.get(id) ?? 0
-      const x = n.x ?? 0
-      const y = n.y ?? 0
-      const cur = Math.atan2(y, x)
-      if (Number.isFinite(cur)) return cur
-      return angleMemoryRef.current.get(id) ?? hashToUnit(id) * TAU
-    }
-
-    const roots = allNodes
-      .filter(n => !n._parentId)
-      .sort((a, b) => String(a.label ?? a.id).localeCompare(String(b.label ?? b.id)))
-
-    roots.forEach((root, i) => {
-      const spread = roots.length > 1 ? 0.9 : 0
-      const angle = -Math.PI / 2 + (i - (roots.length - 1) / 2) * spread
-      targetAngle.set(root.id, angle)
-      angleMemoryRef.current.set(root.id, angle)
+    childrenOf.forEach(kids => {
+      kids.sort((a, b) => {
+        const na = cache.get(a)
+        const nb = cache.get(b)
+        return String(na?.label ?? a).localeCompare(String(nb?.label ?? b))
+      })
     })
 
-    const walk = (id: string) => {
-      const parent = cache.get(id)
-      if (!parent) return
-
-      const parentAngle = targetAngle.get(id) ?? getAngle(id)
-      const kids = (childrenOf.get(id) ?? [])
-        .slice()
-        .sort((a, b) => {
-          const na = cache.get(a)
-          const nb = cache.get(b)
-          return String(na?.label ?? a).localeCompare(String(nb?.label ?? b))
-        })
-
-      if (!kids.length) return
-
-      const span = clamp(0.34 + kids.length * 0.08, 0.34, 1.0)
-      const step = kids.length > 1 ? span / (kids.length - 1) : 0
-
-      kids.forEach((kidId, idx) => {
-        const existing = targetAngle.get(kidId)
-        const angle = existing ?? (parentAngle + (idx - (kids.length - 1) / 2) * step)
-        targetAngle.set(kidId, angle)
-        angleMemoryRef.current.set(kidId, angle)
-        walk(kidId)
-      })
+    const roots = allNodes.filter(n => !n._parentId)
+    
+    if (roots.length > 0) {
+      roots[0].__isRingDrawer = true
     }
 
-    roots.forEach(r => walk(r.id))
+    // Mathematical arc calculation for default positions
+    const weight = new Map<string, number>()
+    const calcWeight = (id: string) => {
+      const kids = childrenOf.get(id) || []
+      if (kids.length === 0) {
+        weight.set(id, 1)
+        return 1
+      }
+      let w = 0
+      for (const k of kids) w += calcWeight(k)
+      weight.set(id, w)
+      return w
+    }
+    roots.forEach(r => calcWeight(r.id))
+    const totalWeight = roots.reduce((sum, r) => sum + (weight.get(r.id) || 1), 0)
 
+    const targetAngle = new Map<string, number>()
+    const assignAngles = (id: string, startAngle: number, endAngle: number) => {
+      const w = weight.get(id) || 1
+      const midAngle = startAngle + (endAngle - startAngle) / 2
+      targetAngle.set(id, midAngle)
+
+      const kids = childrenOf.get(id) || []
+      let currentStart = startAngle
+      for (const k of kids) {
+        const kw = weight.get(k) || 1
+        const slice = (kw / w) * (endAngle - startAngle)
+        assignAngles(k, currentStart, currentStart + slice)
+        currentStart += slice
+      }
+    }
+
+    let currentRootStart = -Math.PI / 2
+    roots.forEach(r => {
+      const w = weight.get(r.id) || 1
+      const slice = (totalWeight > 0 ? (w / totalWeight) : 1 / roots.length) * TAU
+      assignAngles(r.id, currentRootStart, currentRootStart + slice)
+      currentRootStart += slice
+    })
+
+    // Assign positions. If they haven't been dragged, lock them to the math angle.
     allNodes.forEach(n => {
       const d = n.depth ?? 0
-      n._targetRadius = RING_RADII[Math.min(d, RING_RADII.length - 1)]
-      n._targetAngle = targetAngle.get(n.id) ?? angleMemoryRef.current.get(n.id) ?? 0
+      const targetR = RING_RADII[Math.min(d, RING_RADII.length - 1)]
+      const radiusToUse = d === 0 ? 0 : targetR
+      
+      n._dragRadius = radiusToUse 
+
+      const angle = targetAngle.get(n.id) ?? 0
+      n.x = radiusToUse * Math.cos(angle)
+      n.y = radiusToUse * Math.sin(angle)
     })
 
     const visibleIds = new Set<string>()
@@ -210,7 +197,6 @@ export function GraphCanvas() {
     if (selectedNodeId) addAncestors(selectedNodeId)
 
     const filteredNodes = allNodes.filter(n => visibleIds.has(n.id))
-
     const filteredLinks = fgEdges
       .filter(e => {
         const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
@@ -222,8 +208,6 @@ export function GraphCanvas() {
     return { nodes: filteredNodes, links: filteredLinks }
   }, [fgNodes, fgEdges, selectedNodeId, expandedNodeIds])
 
-  // --- Calculate Active Lineage Path ---
-  // Traces up to the root, and includes immediate children of the hovered node
   const activeLineageIds = useMemo(() => {
     const ids = new Set<string>()
     if (!hoveredNodeId) return ids
@@ -231,7 +215,6 @@ export function GraphCanvas() {
     const nodes = graphData.nodes as any[]
     const nodeMap = new Map(nodes.map(n => [n.id, n]))
 
-    // Trace ancestors
     let currentId: string | null = hoveredNodeId
     while (currentId) {
       ids.add(currentId)
@@ -239,11 +222,8 @@ export function GraphCanvas() {
       currentId = node?._parentId ?? null
     }
 
-    // Add immediate children
     nodes.forEach(n => {
-      if (n._parentId === hoveredNodeId) {
-        ids.add(n.id)
-      }
+      if (n._parentId === hoveredNodeId) ids.add(n.id)
     })
 
     return ids
@@ -255,184 +235,108 @@ export function GraphCanvas() {
 
     const nodes = graphData.nodes as any[]
 
-    const linkF = fg.d3Force('link')
-    if (linkF) linkF.strength(0.01).distance(50)
-
     fg.d3Force('charge', null)
+    fg.d3Force('link', null)
+    fg.d3Force('center', null)
 
-    fg.d3Force('radial', (alpha: number) => {
+    fg.d3Force('radialLock', (alpha: number) => {
       nodes.forEach((node: any) => {
         const nx = node.x ?? 0
         const ny = node.y ?? 0
         const depth = node.depth ?? 0
-
-        if (depth === 0) {
-          node.vx = (node.vx ?? 0) - nx * 0.55 * alpha
-          node.vy = (node.vy ?? 0) - ny * 0.55 * alpha
-          return
-        }
-
-        const targetR = RING_RADII[Math.min(depth, RING_RADII.length - 1)]
+        const targetR = depth === 0 ? 0 : RING_RADII[Math.min(depth, RING_RADII.length - 1)]
         const dist = Math.sqrt(nx * nx + ny * ny) || 1
-        const diff = dist - targetR
-        const strength = 0.72
-
-        node.vx = (node.vx ?? 0) - (nx / dist) * diff * strength * alpha
-        node.vy = (node.vy ?? 0) - (ny / dist) * diff * strength * alpha
+        const diff = targetR - dist
+        const strength = 1.6 * alpha  // Strong orbit locking
+        node.vx += (nx / dist) * diff * strength
+        node.vy += (ny / dist) * diff * strength
       })
     })
 
-    fg.d3Force('angularTether', (alpha: number) => {
-      nodes.forEach((node: any) => {
-        const depth = node.depth ?? 0
-        if (depth === 0) return
-
-        const nx = node.x ?? 0
-        const ny = node.y ?? 0
-        const dist = Math.sqrt(nx * nx + ny * ny) || 1
-        const curAngle = Math.atan2(ny, nx)
-        const targetAngle = node._targetAngle ?? curAngle
-        const d = shortestAngleDiff(curAngle, targetAngle)
-
-        const tx = -Math.sin(curAngle)
-        const ty = Math.cos(curAngle)
-
-        const pull = clamp(Math.abs(d), 0, 1.2) * 0.11 * alpha
-        const dir = d > 0 ? 1 : -1
-
-        node.vx = (node.vx ?? 0) + tx * pull * dir
-        node.vy = (node.vy ?? 0) + ty * pull * dir
-
-        const desiredR = node._targetRadius ?? dist
-        const radialFix = (desiredR - dist) * 0.01 * alpha
-        node.vx = (node.vx ?? 0) + (nx / dist) * radialFix
-        node.vy = (node.vy ?? 0) + (ny / dist) * radialFix
-      })
-    })
-
-    fg.d3Force('sameRingSpread', (alpha: number) => {
-      const byDepth = new Map<number, any[]>()
-      nodes.forEach(n => {
-        const d = n.depth ?? 0
-        if (!byDepth.has(d)) byDepth.set(d, [])
-        byDepth.get(d)!.push(n)
-      })
-
-      byDepth.forEach(group => {
-        for (let i = 0; i < group.length; i++) {
-          for (let j = i + 1; j < group.length; j++) {
-            const a = group[i]
-            const b = group[j]
-
-            const ax = a.x ?? 0, ay = a.y ?? 0
-            const bx = b.x ?? 0, by = b.y ?? 0
-
-            const ra = Math.sqrt(ax * ax + ay * ay) || 1
-            const rb = Math.sqrt(bx * bx + by * by) || 1
-            const ta = Math.atan2(ay, ax)
-            const tb = Math.atan2(by, bx)
-
-            const arc = Math.abs(shortestAngleDiff(ta, tb)) * Math.min(ra, rb)
-            const desired = SIBLING_ARC_GAP * Math.min(ra, rb)
-
-            if (arc < desired) {
-              const strength = ((desired - arc) / desired) * 0.22 * alpha
-              const sign = shortestAngleDiff(ta, tb) > 0 ? 1 : -1
-
-              const atx = -Math.sin(ta)
-              const aty = Math.cos(ta)
-              const btx = -Math.sin(tb)
-              const bty = Math.cos(tb)
-
-              a.vx = (a.vx ?? 0) - atx * strength * sign
-              a.vy = (a.vy ?? 0) - aty * strength * sign
-              b.vx = (b.vx ?? 0) + btx * strength * sign
-              b.vy = (b.vy ?? 0) + bty * strength * sign
-            }
-          }
-        }
-      })
-    })
-
-    fg.d3Force('crossRingGuard', (alpha: number) => {
+    fg.d3Force('sameLevelRepel', (alpha: number) => {
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const a = nodes[i]
           const b = nodes[j]
-          if ((a.depth ?? 0) === (b.depth ?? 0)) continue
+          if (a.depth !== b.depth) continue
 
-          const ax = a.x ?? 0, ay = a.y ?? 0
-          const bx = b.x ?? 0, by = b.y ?? 0
-          const dx = bx - ax
-          const dy = by - ay
-          const d = Math.sqrt(dx * dx + dy * dy) || 1
-
-          if (d < CROSS_RING_GUARD) {
-            const magnitude = ((CROSS_RING_GUARD - d) / CROSS_RING_GUARD) * 0.22 * alpha
-            const fx = (dx / d) * magnitude
-            const fy = (dy / d) * magnitude
-            a.vx = (a.vx ?? 0) - fx
-            a.vy = (a.vy ?? 0) - fy
-            b.vx = (b.vx ?? 0) + fx
-            b.vy = (b.vy ?? 0) + fy
-          }
+          const dx = (b.x ?? 0) - (a.x ?? 0)
+          const dy = (b.y ?? 0) - (a.y ?? 0)
+          const d2 = dx * dx + dy * dy || 1
+          const d = Math.sqrt(d2)
+          const sameParent = a._parentId === b._parentId
+          const baseStrength = sameParent ? 60 : 90
+          const repulsionStrength = baseStrength * alpha / d2
+          const fx = (dx / d) * repulsionStrength
+          const fy = (dy / d) * repulsionStrength
+          a.vx -= fx
+          a.vy -= fy
+          b.vx += fx
+          b.vy += fy
         }
       }
     })
 
-    const collideF = fg.d3Force('collide')
-    if (collideF) {
-      collideF
-        .radius((n: any) => 7 + (maxDepth - (n.depth ?? 0)) * 1.8)
-        .strength(0.85)
+    fg.d3ReheatSimulation?.()
+  }, [graphData])
+
+  // ─── Custom Rail Drag Handlers ───────────────────────────────────────────────
+  const handleNodeDrag = useCallback((node: any) => {
+    node.__hasBeenDragged = true
+    const r = node._dragRadius ?? 0
+    if (r === 0) {
+      node.x = 0
+      node.y = 0
+      node.fx = 0
+      node.fy = 0
+      return
     }
+    // Calculate the angle based on where the user pulled the node
+    const angle = Math.atan2(node.y, node.x)
+    // Snap the node's position to that angle on its specific ring
+    node.x = r * Math.cos(angle)
+    node.y = r * Math.sin(angle)
+    node.fx = node.x
+    node.fy = node.y
+  }, [])
 
-    fg.d3ReheatSimulation?.()
-  }, [graphData, maxDepth])
-
-  useEffect(() => {
-    const fg = graphRef.current
-    if (!fg || !expandedNodeIds.size) return
-    const nodes = graphData.nodes as any[]
-
-    expandedNodeIds.forEach(eid => {
-      const parent = nodes.find((n: any) => n.id === eid)
-      if (!parent) return
-
-      const children = nodes.filter((n: any) => n._parentId === eid)
-      if (!children.length) return
-
-      const parentAngle = Math.atan2(parent.y ?? 0, parent.x ?? 0)
-      const baseAngle = Number.isFinite(parentAngle) ? parentAngle : -Math.PI / 2
-
-      const totalArc = Math.min(Math.PI * 0.24, 0.12 * children.length)
-      const step = children.length > 1 ? totalArc / (children.length - 1) : 0
-
-      children.forEach((child: any, idx: number) => {
-        const cx = child.x ?? 0
-        const cy = child.y ?? 0
-        const alreadyPlaced = Math.sqrt(cx * cx + cy * cy) > 20
-        if (alreadyPlaced) return
-
-        const childDepth = child.depth ?? 0
-        const targetR = RING_RADII[Math.min(childDepth, RING_RADII.length - 1)]
-        const angle = baseAngle + (idx - (children.length - 1) / 2) * step
-
-        child.x = Math.cos(angle) * targetR + (Math.random() - 0.5) * 8
-        child.y = Math.sin(angle) * targetR + (Math.random() - 0.5) * 8
-        child.vx = 0
-        child.vy = 0
-      })
-    })
-
-    fg.d3ReheatSimulation?.()
-  }, [graphData, expandedNodeIds])
+  const handleNodeDragEnd = useCallback((node: any) => {
+    node.__hasBeenDragged = true
+    const r = node._dragRadius ?? 0
+    if (r === 0) {
+      node.x = 0
+      node.y = 0
+      node.fx = 0
+      node.fy = 0
+      return
+    }
+    const angle = Math.atan2(node.y, node.x)
+    node.x = r * Math.cos(angle)
+    node.y = r * Math.sin(angle)
+    node.fx = node.x
+    node.fy = node.y
+  }, [])
 
   const paintNode = useCallback(
     (node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
       const nx = node.x
       const ny = node.y
       if (nx == null || ny == null || !isFinite(nx) || !isFinite(ny)) return
+
+      if (node.__isRingDrawer) {
+        ctx.save()
+        ctx.strokeStyle = 'rgba(190, 180, 220, 0.12)'
+        ctx.lineWidth = 1.5 / globalScale
+        for (let i = 1; i <= maxDepth; i++) {
+          const radius = RING_RADII[Math.min(i, RING_RADII.length - 1)]
+          if (radius) {
+            ctx.beginPath()
+            ctx.arc(0, 0, radius, 0, TAU)
+            ctx.stroke()
+          }
+        }
+        ctx.restore()
+      }
 
       const depth = node.depth ?? 0
       const isSelected = selectedNodeId === node.id
@@ -442,16 +346,9 @@ export function GraphCanvas() {
       const isActivated = isSelected || isExpanded
       const color = depthColor(depth)
 
-      // --- Apply Hierarchy Dimming ---
       let focusOpacity = 1
       if (hoveredNodeId) {
-        // If a node is hovered, highlight its lineage/children and deeply dim the rest
         focusOpacity = inHoverLineage ? 1 : 0.12
-      } else if (selectedNodeId) {
-        // Fallback to selection dimming if no hover is active
-        if (isSelected) focusOpacity = 1
-        else if (isExpanded) focusOpacity = 0.5
-        else focusOpacity = 0.15
       }
 
       ctx.save()
@@ -490,7 +387,7 @@ export function GraphCanvas() {
         }
       }
 
-      const minScale = depth === 0 ? 0 : depth === 1 ? 0.42 : depth === 2 ? 0.95 : 1.55
+      const minScale = depth === 0 ? 0 : depth === 1 ? 0.3 : depth === 2 ? 0.7 : 1.2
       if (globalScale >= minScale || isActivated || inHoverLineage) {
         const raw = (node.label || node.data?.label || '').trim()
         if (!raw) {
@@ -503,7 +400,6 @@ export function GraphCanvas() {
         const fontSize = Math.max(9, (depth <= 1 ? 12 : 10) / globalScale)
         const fadeIn = Math.min(1, (globalScale - minScale + 0.35) / 0.35)
         
-        // Keep text fully visible if it's in the hovered lineage
         const textAlpha = isActivated || inHoverLineage ? 1 : fadeIn * (depth === 0 ? 0.95 : 0.72)
 
         ctx.save()
@@ -526,10 +422,10 @@ export function GraphCanvas() {
                   : [180, 178, 210]
 
         ctx.fillStyle = `rgba(${lr},${lg},${lb},${textAlpha})`
-        ctx.fillText(label, nx, ny + r + 4)
+        ctx.fillText(label, nx, ny + r + 6)
         ctx.restore()
       }
-      ctx.restore() // Restores globalAlpha
+      ctx.restore() 
     },
     [selectedNodeId, expandedNodeIds, hoveredNodeId, activeLineageIds, maxDepth]
   )
@@ -564,15 +460,11 @@ export function GraphCanvas() {
     const src = typeof link.source === 'object' ? link.source?.id : link.source
     const tgt = typeof link.target === 'object' ? link.target?.id : link.target
 
-    // Hover takes visual priority
     if (hoveredNodeId) {
-      // Since it's a strict tree hierarchy, if both nodes are in the lineage, 
-      // the link between them is guaranteed to be a lineage path.
       const isLineageLink = activeLineageIds.has(src) && activeLineageIds.has(tgt)
       return isLineageLink ? 'rgba(210, 195, 255, 0.95)' : 'rgba(140, 130, 175, 0.05)'
     }
 
-    // Fall back to selection/expansion highlights
     if (selectedNodeId) {
       const isSelectedLink = src === selectedNodeId || tgt === selectedNodeId
       return isSelectedLink ? 'rgba(210, 195, 255, 0.85)' : 'rgba(140, 130, 175, 0.05)'
@@ -649,16 +541,15 @@ export function GraphCanvas() {
           nodeId="id"
           backgroundColor="#0d0f12"
           warmupTicks={0}
-          cooldownTicks={Infinity}
-          cooldownTime={Infinity}
-          d3AlphaDecay={0.012}
-          d3VelocityDecay={0.3}
+          cooldownTicks={100} // Allow light physics simulation
           linkColor={linkColor}
           linkWidth={linkWidth}
           linkCurvature={linkCurvature}
           linkDirectionalArrowLength={0}
           linkDirectionalParticles={0}
-          enableNodeDrag={true}
+          enableNodeDrag={true} // Enable dragging
+          onNodeDrag={handleNodeDrag}       // Intercept drag to lock to ring
+          onNodeDragEnd={handleNodeDragEnd} // Pin upon release
           onNodeClick={handleNodeClick}
           onBackgroundClick={handleBackgroundClick}
           onNodeHover={(node: any) => {
