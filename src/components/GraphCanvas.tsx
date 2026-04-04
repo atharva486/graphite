@@ -32,12 +32,18 @@ const RING_RADII = [
 export function GraphCanvas() {
   const fgNodes        = useDocStore(s => s.flowNodes)
   const fgEdges        = useDocStore(s => s.flowEdges)
+  const manualNodes    = useDocStore(s => s.manualNodes)
+  const addManualNode  = useDocStore(s => s.addManualNode)
+  const updateManualNode = useDocStore(s => s.updateManualNode)
+  const deleteManualNode = useDocStore(s => s.deleteManualNode)
   const selectNode     = useDocStore(s => s.selectNode)
   const status         = useDocStore(s => s.status)
   const selectedNodeId = useDocStore(s => s.selectedNodeId)
 
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set())
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null)
+  const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; type: 'canvas' | 'node'; nodeId?: string } | null>(null)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const graphRef     = useRef<any>(null)
@@ -87,7 +93,29 @@ export function GraphCanvas() {
       }
     }
 
-    const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id))
+    // Convert manual nodes to FGNode format
+    manualNodes.forEach(mn => {
+      const node = cache.get(mn.id)
+      if (!node) {
+        const newNode = {
+          id: mn.id,
+          label: mn.label,
+          nodeType: 'manual' as any,
+          depth: 0,
+          page: 0,
+          page_range: [0, 0] as [number, number],
+          docNode: {} as any, // placeholder
+          isSelected: false,
+          __hasBeenDragged: false,
+        }
+        cache.set(mn.id, newNode)
+      } else {
+        // Update existing
+        node.label = mn.label
+      }
+    })
+
+    const allNodes = Array.from(cache.values()).filter(n => liveIds.has(n.id) || manualNodes.some(mn => mn.id === n.id))
 
     // Build hierarchy
     const parentOf = new Map<string, string>()
@@ -95,6 +123,13 @@ export function GraphCanvas() {
       const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
       const t = typeof e.target === 'object' ? (e.target as any).id : String(e.target)
       parentOf.set(t, s)
+    })
+
+    // Add manual node edges
+    manualNodes.forEach(mn => {
+      mn.parents.forEach(parentId => {
+        parentOf.set(mn.id, parentId)
+      })
     })
 
     const childrenOf = new Map<string, string[]>()
@@ -176,15 +211,31 @@ export function GraphCanvas() {
 
     // Assign positions. If they haven't been dragged, lock them to the math angle.
     allNodes.forEach(n => {
-      const d = n.depth ?? 0
-      const targetR = RING_RADII[Math.min(d, RING_RADII.length - 1)]
-      const radiusToUse = d === 0 ? 0 : targetR
-      
-      n._dragRadius = radiusToUse 
+      const isManual = n.nodeType === 'manual'
+      if (isManual) {
+        // Manual nodes are free-floating, don't constrain to rings
+        n._dragRadius = 0
+        // Use stored position from manual node if available
+        const manualNode = manualNodes.find(mn => mn.id === n.id)
+        if (manualNode?.x != null && manualNode?.y != null) {
+          n.x = manualNode.x
+          n.y = manualNode.y
+        } else if (n.x == null || n.y == null) {
+          // Set default position if none exists
+          n.x = Math.random() * 400 - 200
+          n.y = Math.random() * 400 - 200
+        }
+      } else {
+        const d = n.depth ?? 0
+        const targetR = RING_RADII[Math.min(d, RING_RADII.length - 1)]
+        const radiusToUse = d === 0 ? 0 : targetR
+        
+        n._dragRadius = radiusToUse 
 
-      const angle = targetAngle.get(n.id) ?? 0
-      n.x = radiusToUse * Math.cos(angle)
-      n.y = radiusToUse * Math.sin(angle)
+        const angle = targetAngle.get(n.id) ?? 0
+        n.x = radiusToUse * Math.cos(angle)
+        n.y = radiusToUse * Math.sin(angle)
+      }
     })
 
     const visibleIds = new Set<string>()
@@ -211,7 +262,16 @@ export function GraphCanvas() {
     if (selectedNodeId) addAncestors(selectedNodeId)
 
     const filteredNodes = allNodes.filter(n => visibleIds.has(n.id))
-    const filteredLinks = fgEdges
+    
+    // Create edges for manual nodes
+    const manualEdges = manualNodes.flatMap(mn => 
+      mn.parents.map(parentId => ({
+        source: parentId,
+        target: mn.id,
+      }))
+    )
+    
+    const filteredLinks = [...fgEdges, ...manualEdges]
       .filter(e => {
         const s = typeof e.source === 'object' ? (e.source as any).id : String(e.source)
         const t = typeof e.target === 'object' ? (e.target as any).id : String(e.target)
@@ -220,7 +280,7 @@ export function GraphCanvas() {
       .map(e => ({ ...e }))
 
     return { nodes: filteredNodes, links: filteredLinks }
-  }, [fgNodes, fgEdges, selectedNodeId, expandedNodeIds])
+  }, [fgNodes, fgEdges, manualNodes, selectedNodeId, expandedNodeIds])
 
   const activeLineageIds = useMemo(() => {
     const ids = new Set<string>()
@@ -235,10 +295,6 @@ export function GraphCanvas() {
       const node = nodeMap.get(currentId)
       currentId = node?._parentId ?? null
     }
-
-    nodes.forEach(n => {
-      if (n._parentId === hoveredNodeId) ids.add(n.id)
-    })
 
     return ids
   }, [hoveredNodeId, graphData.nodes])
@@ -255,6 +311,9 @@ export function GraphCanvas() {
 
     fg.d3Force('radialLock', (alpha: number) => {
       nodes.forEach((node: any) => {
+        const isManual = node.nodeType === 'manual'
+        if (isManual) return // Manual nodes are free-floating
+        
         const nx = node.x ?? 0
         const ny = node.y ?? 0
         const depth = node.depth ?? 0
@@ -291,12 +350,47 @@ export function GraphCanvas() {
       }
     })
 
+    fg.d3Force('manualNodeAttraction', (alpha: number) => {
+      nodes.forEach((node: any) => {
+        const isManual = node.nodeType === 'manual'
+        if (!isManual) return
+
+        // Find parent nodes
+        const parentIds = manualNodes.find(mn => mn.id === node.id)?.parents || []
+        if (parentIds.length === 0) return
+
+        parentIds.forEach(parentId => {
+          const parentNode = nodes.find(n => n.id === parentId)
+          if (!parentNode) return
+
+          const dx = (parentNode.x ?? 0) - (node.x ?? 0)
+          const dy = (parentNode.y ?? 0) - (node.y ?? 0)
+          const d2 = dx * dx + dy * dy || 1
+          const d = Math.sqrt(d2)
+          
+          // Attractive force towards parent
+          const attractionStrength = 0.5 * alpha / d2
+          const fx = (dx / d) * attractionStrength
+          const fy = (dy / d) * attractionStrength
+          
+          node.vx += fx
+          node.vy += fy
+        })
+      })
+    })
+
     fg.d3ReheatSimulation?.()
   }, [graphData])
 
   // ─── Custom Rail Drag Handlers ───────────────────────────────────────────────
   const handleNodeDrag = useCallback((node: any) => {
     node.__hasBeenDragged = true
+    const isManual = node.nodeType === 'manual'
+    if (isManual) {
+      // Manual nodes can be dragged freely
+      return
+    }
+    
     const r = node._dragRadius ?? 0
     if (r === 0) {
       node.x = 0
@@ -316,6 +410,13 @@ export function GraphCanvas() {
 
   const handleNodeDragEnd = useCallback((node: any) => {
     node.__hasBeenDragged = true
+    const isManual = node.nodeType === 'manual'
+    if (isManual) {
+      // Save the position for manual nodes
+      updateManualNode(node.id, { x: node.x, y: node.y })
+      return
+    }
+    
     const r = node._dragRadius ?? 0
     if (r === 0) {
       node.x = 0
@@ -329,7 +430,7 @@ export function GraphCanvas() {
     node.y = r * Math.sin(angle)
     node.fx = node.x
     node.fy = node.y
-  }, [])
+  }, [updateManualNode])
 
   const paintNode = useCallback(
     (node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
@@ -359,7 +460,9 @@ export function GraphCanvas() {
       const isHovered = hoveredNodeId === node.id
       const inHoverLineage = activeLineageIds.has(node.id)
       const isActivated = isSelected || isExpanded
-      const color = depthColor(depth)
+      const isManual = node.nodeType === 'manual'
+      const isConnecting = connectingFrom === node.id
+      const color = isManual ? '#ff6b6b' : depthColor(depth)
 
       let focusOpacity = 1
       if (hoveredNodeId) {
@@ -370,11 +473,11 @@ export function GraphCanvas() {
       ctx.globalAlpha = focusOpacity
 
       const baseR = 3.5 + (maxDepth - depth) * 2.2
-      const r = isActivated ? baseR * 1.42 : baseR
+      const r = isActivated ? baseR * 1.42 : isConnecting ? baseR * 1.8 : baseR
 
-      const haloR = r * (isSelected ? 3.2 : isExpanded ? 2.7 : isHovered ? 2.2 : 1.8)
+      const haloR = r * (isSelected ? 3.2 : isExpanded ? 2.7 : isHovered ? 2.2 : isConnecting ? 2.5 : 1.8)
       const grad = ctx.createRadialGradient(nx, ny, r * 0.25, nx, ny, haloR)
-      const haloA = isSelected ? '66' : isExpanded ? '48' : isHovered ? '2d' : '18'
+      const haloA = isSelected ? '66' : isExpanded ? '48' : isHovered ? '2d' : isConnecting ? '4d' : '18'
       grad.addColorStop(0, color + haloA)
       grad.addColorStop(1, color + '00')
 
@@ -475,7 +578,69 @@ export function GraphCanvas() {
     [maxDepth]
   )
 
-  const handleNodeClick = useCallback((n: any) => {
+  // Check if targetId is a descendant of sourceId (traverses manual node hierarchy)
+  const isDescendantOf = useCallback((sourceId: string, targetId: string): boolean => {
+    const visited = new Set<string>()
+
+    const traverse = (nodeId: string): boolean => {
+      if (visited.has(nodeId)) return false
+      visited.add(nodeId)
+
+      if (nodeId === targetId) return true
+
+      const node = manualNodes.find(mn => mn.id === nodeId)
+      if (!node) return false
+
+      // Recursively check all ancestors (parents and their parents)
+      for (const parentId of node.parents) {
+        if (traverse(parentId)) return true
+      }
+
+      return false
+    }
+
+    return traverse(sourceId)
+  }, [manualNodes])
+
+  const handleNodeClick = useCallback((n: any, event?: any) => {
+    const isManual = n.nodeType === 'manual'
+    const isShiftPressed = event?.shiftKey
+
+    if (connectingFrom) {
+      // In connection mode - connect to this node
+      if (connectingFrom !== n.id) {
+        const manualNode = manualNodes.find(mn => mn.id === connectingFrom)
+        if (manualNode && !manualNode.parents.includes(n.id)) {
+          // Check for cycles: n.id cannot be a descendant of connectingFrom
+          if (isDescendantOf(n.id, connectingFrom)) {
+            console.warn('Cannot connect: would create a cycle')
+            setConnectingFrom(null)
+            return
+          }
+
+          // Add this node as parent to the connecting manual node
+          updateManualNode(connectingFrom, {
+            parents: [...manualNode.parents, n.id],
+            isLinked: false  // Mark as linked now
+          })
+        }
+      }
+      setConnectingFrom(null)
+      return
+    }
+
+    if (isManual && isShiftPressed) {
+      // Only allow shift-click if node is not already linked
+      const manualNode = manualNodes.find(mn => mn.id === n.id)
+      if (manualNode && !manualNode.isLinked) {
+        console.warn('This node is already linked and cannot be connected to another parent')
+        return
+      }
+      // Start connection mode
+      setConnectingFrom(n.id)
+      return
+    }
+
     if (n.hasChildren) {
       setExpandedNodeIds(prev => {
         const next = new Set(prev)
@@ -485,9 +650,58 @@ export function GraphCanvas() {
       })
     }
     selectNode(n.id)
+  }, [selectNode, connectingFrom, manualNodes, updateManualNode, isDescendantOf])
+
+  const handleBackgroundClick = useCallback(() => {
+    selectNode(null)
+    setConnectingFrom(null)
+    setContextMenu(null)
   }, [selectNode])
 
-  const handleBackgroundClick = useCallback(() => selectNode(null), [selectNode])
+  const handleContextMenu = useCallback((event: React.MouseEvent) => {
+    event.preventDefault()
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (rect) {
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      setContextMenu({ x, y, type: 'canvas' })
+    }
+  }, [])
+
+  const handleNodeRightClick = useCallback((node: any, event: any) => {
+    event.preventDefault()
+    const isManual = node.nodeType === 'manual'
+    if (isManual) {
+      const rect = containerRef.current?.getBoundingClientRect()
+      if (rect) {
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        setContextMenu({ x, y, type: 'node', nodeId: node.id })
+      }
+    }
+  }, [])
+
+  const handleAddManualNode = useCallback((x?: number, y?: number) => {
+    const id = `manual-${Date.now()}`
+    const label = `Manual Node ${manualNodes.length + 1}`
+    const path = `user-notes/${id}.md`
+    const node = {
+      id,
+      parents: [],
+      path,
+      label,
+      x, // Store initial position
+      y,
+      isLinked: true,  // Newly created nodes can be linked
+    }
+    addManualNode(node)
+    setContextMenu(null) // Close context menu
+  }, [manualNodes.length, addManualNode])
+
+  const handleDeleteManualNode = useCallback((nodeId: string) => {
+    deleteManualNode(nodeId)
+    setContextMenu(null)
+  }, [deleteManualNode])
 
   const linkColor = useCallback((link: any) => {
     const src = typeof link.source === 'object' ? link.source?.id : link.source
@@ -554,6 +768,7 @@ export function GraphCanvas() {
     <div
       className="graph-canvas"
       ref={containerRef}
+      onContextMenu={handleContextMenu}
       style={{
         width: '100%',
         height: '100%',
@@ -585,10 +800,15 @@ export function GraphCanvas() {
           onNodeDragEnd={handleNodeDragEnd} // Pin upon release
           onNodeClick={handleNodeClick}
           onBackgroundClick={handleBackgroundClick}
+          onNodeRightClick={handleNodeRightClick}
           onNodeHover={(node: any) => {
             setHoveredNodeId(node?.id ?? null)
             if (containerRef.current) {
-              containerRef.current.style.cursor = node ? 'pointer' : 'default'
+              if (connectingFrom) {
+                containerRef.current.style.cursor = 'crosshair'
+              } else {
+                containerRef.current.style.cursor = node ? 'pointer' : 'default'
+              }
             }
           }}
           nodeCanvasObject={paintNode}
@@ -700,6 +920,77 @@ export function GraphCanvas() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div
+          style={{
+            position: 'absolute',
+            left: contextMenu.x,
+            top: contextMenu.y,
+            background: 'rgba(10,12,16,0.95)',
+            border: '1px solid rgba(190,170,255,0.3)',
+            borderRadius: 8,
+            padding: '8px 0',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+            zIndex: 1000,
+            minWidth: 150,
+          }}
+        >
+          {contextMenu.type === 'canvas' && (
+            <button
+              onClick={() => {
+                // Use screen2GraphCoords to convert coordinates properly
+                const graphCoords = graphRef.current?.screen2GraphCoords(contextMenu.x, contextMenu.y)
+                handleAddManualNode(graphCoords?.x, graphCoords?.y)
+              }}
+              style={{
+                width: '100%',
+                padding: '8px 16px',
+                background: 'none',
+                border: 'none',
+                color: 'rgba(220,214,240,0.9)',
+                textAlign: 'left',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontFamily: '-apple-system,"Segoe UI",sans-serif',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(191, 149, 249, 0.2)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'none'
+              }}
+            >
+              Add Manual Node
+            </button>
+          )}
+          {contextMenu.type === 'node' && contextMenu.nodeId && (
+            <button
+              onClick={() => handleDeleteManualNode(contextMenu.nodeId!)}
+              style={{
+                width: '100%',
+                padding: '8px 16px',
+                background: 'none',
+                border: 'none',
+                color: 'rgba(239, 68, 68, 0.9)', // Red color for delete
+                textAlign: 'left',
+                cursor: 'pointer',
+                fontSize: 14,
+                fontFamily: '-apple-system,"Segoe UI",sans-serif',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'none'
+              }}
+            >
+              Delete Node
+            </button>
+          )}
         </div>
       )}
     </div>

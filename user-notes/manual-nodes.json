@@ -1,0 +1,68 @@
+[
+  {
+    "id": "manual-1775336001410",
+    "parents": [
+      "manual-1775336004143"
+    ],
+    "path": "user-notes/manual-1775336001410.md",
+    "label": "Manual Node 1",
+    "x": 333.4198908585984,
+    "y": -172.88933213481508,
+    "isLinked": false
+  },
+  {
+    "id": "manual-1775336002886",
+    "parents": [
+      "manual-1775336001410"
+    ],
+    "path": "user-notes/manual-1775336002886.md",
+    "label": "Manual Node 2",
+    "x": 414.4878765394727,
+    "y": -220.9680548723755,
+    "isLinked": false
+  },
+  {
+    "id": "manual-1775336004143",
+    "parents": [
+      "manual-1775336002886"
+    ],
+    "path": "user-notes/manual-1775336004143.md",
+    "label": "Manual Node 3",
+    "x": 479.47625754613694,
+    "y": -146.19544453362104,
+    "isLinked": false
+  },
+  {
+    "id": "manual-1775336415981",
+    "parents": [
+      "manual-1775336417185"
+    ],
+    "path": "user-notes/manual-1775336415981.md",
+    "label": "Manual Node 4",
+    "x": -216.74138627706574,
+    "y": -847.03504364729,
+    "isLinked": false
+  },
+  {
+    "id": "manual-1775336417185",
+    "parents": [
+      "manual-1775336418397"
+    ],
+    "path": "user-notes/manual-1775336417185.md",
+    "label": "Manual Node 5",
+    "x": -239.78067009294872,
+    "y": -814.3542068133527,
+    "isLinked": false
+  },
+  {
+    "id": "manual-1775336418397",
+    "parents": [
+      "node_0_16_0_1"
+    ],
+    "path": "user-notes/manual-1775336418397.md",
+    "label": "Manual Node 6",
+    "x": -270.87670075683167,
+    "y": -765.9285691380989,
+    "isLinked": false
+  }
+]

@@ -1,11 +1,12 @@
 import { create } from 'zustand'
-import type { FGNode, FGLink, DocNode, AppStatus } from '../types/docling'
+import type { FGNode, FGLink, DocNode, AppStatus, ManualNode } from '../types/docling'
 import { parseDoclingJson } from '../lib/parseDoclingJson'
 
 interface DocStore {
   docTree:        DocNode | null
   flowNodes:      FGNode[]          // ← FGNode not Node<GraphNodeData>
   flowEdges:      FGLink[]          // ← FGLink not Edge
+  manualNodes:    ManualNode[]
   selectedNodeId: string | null
   pdfPath:        string | null
   jsonPath:       string | null
@@ -21,6 +22,11 @@ interface DocStore {
   setScanProgress:    (msg: string) => void
   updateFlowNodes:    (nodes: FGNode[]) => void
   updateFlowEdges:    (edges: FGLink[]) => void
+  addManualNode:      (node: ManualNode) => void
+  loadManualNodes:    () => Promise<void>
+  saveManualNodes:    () => Promise<void>
+  updateManualNode:   (id: string, updates: Partial<ManualNode>) => void
+  deleteManualNode:   (id: string) => void
   reset:              () => void
 }
 
@@ -36,11 +42,12 @@ function findNodeByPage(node: DocNode, page: number): DocNode | null {
 const INITIAL: Omit<DocStore,
   | 'loadFromJson' | 'appendSubHeadings' | 'selectNode'
   | 'setPdfPath'   | 'setStatus'         | 'setScanProgress'
-  | 'updateFlowNodes' | 'updateFlowEdges' | 'reset'
+  | 'updateFlowNodes' | 'updateFlowEdges' | 'addManualNode' | 'loadManualNodes' | 'saveManualNodes' | 'updateManualNode' | 'deleteManualNode' | 'reset'
 > = {
   docTree:        null,
   flowNodes:      [],
   flowEdges:      [],
+  manualNodes:    [],
   selectedNodeId: null,
   pdfPath:        null,
   jsonPath:       null,
@@ -102,5 +109,45 @@ export const useDocStore = create<DocStore>((set, get) => ({
   setScanProgress: (msg)         => set({ scanProgress: msg }),
   updateFlowNodes: (nodes)       => set({ flowNodes: nodes }),
   updateFlowEdges: (edges)       => set({ flowEdges: edges }),
+  addManualNode:   (node)        => {
+    set(state => ({ manualNodes: [...state.manualNodes, node] }))
+    // Save after adding
+    get().saveManualNodes()
+  },
+  loadManualNodes: async () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      const result = await window.electronAPI.loadJsonFile('user-notes/manual-nodes.json')
+      if (result.ok && Array.isArray(result.data)) {
+        // Ensure backward compatibility: add isLinked field if missing
+        const normalizedNodes = (result.data as any[]).map(node => ({
+          ...node,
+          isLinked: node.isLinked !== undefined ? node.isLinked : node.parents.length === 0
+        })) as ManualNode[]
+        set({ manualNodes: normalizedNodes })
+      }
+    }
+  },
+  saveManualNodes: async () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      const { manualNodes } = get()
+      await window.electronAPI.saveJsonFile('user-notes/manual-nodes.json', manualNodes)
+    }
+  },
+  updateManualNode: (id, updates) => {
+    set(state => ({
+      manualNodes: state.manualNodes.map(mn => 
+        mn.id === id ? { ...mn, ...updates } : mn
+      )
+    }))
+    // Save after updating
+    get().saveManualNodes()
+  },
+  deleteManualNode: (id) => {
+    set(state => ({
+      manualNodes: state.manualNodes.filter(mn => mn.id !== id)
+    }))
+    // Save after deleting
+    get().saveManualNodes()
+  },
   reset:           ()            => set({ ...INITIAL }),
 }))

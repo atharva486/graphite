@@ -48,6 +48,17 @@ export interface FGNode {
   x?: number; y?: number; vx?: number; vy?: number; fx?: number; fy?: number
 }
 
+// ─── Manual node ─────────────────────────────────────────────────────────────
+export interface ManualNode {
+  id: string
+  parents: string[]
+  path: string
+  label: string
+  x?: number
+  y?: number
+  isLinked: boolean  // true when created, false after connecting to a parent
+}
+
 // ─── Force-graph link (used by react-force-graph) ─────────────────────────────
 export interface FGLink {
   id: string
