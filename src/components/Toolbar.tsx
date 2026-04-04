@@ -30,23 +30,19 @@ const handleOpenFile = useCallback(async () => {
     if (!filePath) return
 
     if (filePath.endsWith('.json')){
-      console.log("⚛️ [FRONTEND DEBUG] 1. Sent path to Main. Waiting for response...") 
+
       setStatus('loading', 'Reading JSON…')
       
       const result = await window.electronAPI.loadJsonFile(filePath)
-      console.log("⚛️ [FRONTEND DEBUG] 2. Received response from Main:", result) 
       
       if (result.ok && result.data) {
-        console.log("⚛️ [FRONTEND DEBUG] 3. Data is good! Pushing to useDocStore.loadFromJson...") 
         loadFromJson(result.data, filePath)
       } else {
-        console.error("⚛️ [FRONTEND DEBUG ERROR] Result was not OK:", result.error) 
         setStatus('error', `Failed: ${result.error}`)
       }
     } 
     // 👇 --- ADD THIS BLOCK FOR PDF --- 👇
     else if (filePath.endsWith('.pdf')) {
-      console.log(`⚛️ [FRONTEND DEBUG] PDF selected: ${filePath}`)
       
       setPdfPath(filePath)
       

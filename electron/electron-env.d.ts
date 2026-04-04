@@ -14,6 +14,8 @@ interface Window {
     openFile: (
       filters?: { name: string; extensions: string[] }[]
     ) => Promise<string | null>
+    // Add this inside the electronAPI object:
+getAiCards: (payload: any) => Promise<any>
 
     loadJsonFile: (
       filePath: string

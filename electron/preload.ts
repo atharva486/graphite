@@ -15,7 +15,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   /** Legacy: POST to Python FastAPI /process-pdf. */
   processPdf: (pdfPath: string): Promise<{ ok: boolean; data?: unknown; error?: string }> =>
     ipcRenderer.invoke('pdf:process', pdfPath),
-
+  // Add this near processPdf or loadJsonFile:
+  getAiCards: (payload: any) => ipcRenderer.invoke('get-ai-cards', payload),
   /**
    * Upload PDF to Python streaming server (:8002).
    * Stream chunks are delivered via onStreamChunk listener.

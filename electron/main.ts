@@ -120,6 +120,34 @@ function createWindow() {
 
 // ─── IPC: Open file ───────────────────────────────────────────────────────────
 
+
+// ─── IPC: AI Gemini Cards ──────────────────────────────────────────────────────
+// 👇 ADD THIS BLOCK TO main.ts
+ipcMain.handle('get-ai-cards', async (_event, payload) => {
+  try {
+    console.log("[MAIN] Asking Python for cards:", payload.node_id);
+    
+    const response = await fetch('http://localhost:8005/get-cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        node_id: payload.node_id,       // The ID of the node clicked
+        json_path: payload.json_path,   // The absolute path to the file
+        visited_ids: payload.visited_ids || []
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      return { error: `Python Server Error: ${errText}` };
+    }
+
+    return await response.json(); // Sends the Gemini cards back to React
+  } catch (e: any) {
+    console.error("[MAIN] Fetch failed:", e);
+    return { error: `Failed to connect to Python: ${e.message}` };
+  }
+});
 ipcMain.handle('dialog:openFile', async (_event, filters?: { name: string; extensions: string[] }[]) => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
